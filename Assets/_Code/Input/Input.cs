@@ -12,7 +12,7 @@ public partial class Input : MonoBehaviour
     static readonly string[] axesNames = new string[] { "mouse_axis_0", "mouse_axis_1", "mouse_axis_2", "joy_0_axis_0", "joy_0_axis_1", "joy_0_axis_2", "joy_0_axis_3", "joy_0_axis_4", "joy_0_axis_5", "joy_0_axis_6", "joy_0_axis_7", "joy_0_axis_8", "joy_0_axis_9", "joy_0_axis_10", "joy_0_axis_11", "joy_0_axis_12", "joy_0_axis_13", "joy_0_axis_14", "joy_0_axis_15", "joy_0_axis_16", "joy_0_axis_17", "joy_0_axis_18", "joy_0_axis_19", "joy_0_axis_20", "joy_0_axis_21", "joy_0_axis_22", "joy_0_axis_23", "joy_0_axis_24", "joy_0_axis_25", "joy_0_axis_26", "joy_0_axis_27", "joy_1_axis_0", "joy_1_axis_1", "joy_1_axis_2", "joy_1_axis_3", "joy_1_axis_4", "joy_1_axis_5", "joy_1_axis_6", "joy_1_axis_7", "joy_1_axis_8", "joy_1_axis_9", "joy_1_axis_10", "joy_1_axis_11", "joy_1_axis_12", "joy_1_axis_13", "joy_1_axis_14", "joy_1_axis_15", "joy_1_axis_16", "joy_1_axis_17", "joy_1_axis_18", "joy_1_axis_19", "joy_1_axis_20", "joy_1_axis_21", "joy_1_axis_22", "joy_1_axis_23", "joy_1_axis_24", "joy_1_axis_25", "joy_1_axis_26", "joy_1_axis_27", "joy_2_axis_0", "joy_2_axis_1", "joy_2_axis_2", "joy_2_axis_3", "joy_2_axis_4", "joy_2_axis_5", "joy_2_axis_6", "joy_2_axis_7", "joy_2_axis_8", "joy_2_axis_9", "joy_2_axis_10", "joy_2_axis_11", "joy_2_axis_12", "joy_2_axis_13", "joy_2_axis_14", "joy_2_axis_15", "joy_2_axis_16", "joy_2_axis_17", "joy_2_axis_18", "joy_2_axis_19", "joy_2_axis_20", "joy_2_axis_21", "joy_2_axis_22", "joy_2_axis_23", "joy_2_axis_24", "joy_2_axis_25", "joy_2_axis_26", "joy_2_axis_27", "joy_3_axis_0", "joy_3_axis_1", "joy_3_axis_2", "joy_3_axis_3", "joy_3_axis_4", "joy_3_axis_5", "joy_3_axis_6", "joy_3_axis_7", "joy_3_axis_8", "joy_3_axis_9", "joy_3_axis_10", "joy_3_axis_11", "joy_3_axis_12", "joy_3_axis_13", "joy_3_axis_14", "joy_3_axis_15", "joy_3_axis_16", "joy_3_axis_17", "joy_3_axis_18", "joy_3_axis_19", "joy_3_axis_20", "joy_3_axis_21", "joy_3_axis_22", "joy_3_axis_23", "joy_3_axis_24", "joy_3_axis_25", "joy_3_axis_26", "joy_3_axis_27", "joy_4_axis_0", "joy_4_axis_1", "joy_4_axis_2", "joy_4_axis_3", "joy_4_axis_4", "joy_4_axis_5", "joy_4_axis_6", "joy_4_axis_7", "joy_4_axis_8", "joy_4_axis_9", "joy_4_axis_10", "joy_4_axis_11", "joy_4_axis_12", "joy_4_axis_13", "joy_4_axis_14", "joy_4_axis_15", "joy_4_axis_16", "joy_4_axis_17", "joy_4_axis_18", "joy_4_axis_19", "joy_4_axis_20", "joy_4_axis_21", "joy_4_axis_22", "joy_4_axis_23", "joy_4_axis_24", "joy_4_axis_25", "joy_4_axis_26", "joy_4_axis_27", "joy_5_axis_0", "joy_5_axis_1", "joy_5_axis_2", "joy_5_axis_3", "joy_5_axis_4", "joy_5_axis_5", "joy_5_axis_6", "joy_5_axis_7", "joy_5_axis_8", "joy_5_axis_9", "joy_5_axis_10", "joy_5_axis_11", "joy_5_axis_12", "joy_5_axis_13", "joy_5_axis_14", "joy_5_axis_15", "joy_5_axis_16", "joy_5_axis_17", "joy_5_axis_18", "joy_5_axis_19", "joy_5_axis_20", "joy_5_axis_21", "joy_5_axis_22", "joy_5_axis_23", "joy_5_axis_24", "joy_5_axis_25", "joy_5_axis_26", "joy_5_axis_27", "joy_6_axis_0", "joy_6_axis_1", "joy_6_axis_2", "joy_6_axis_3", "joy_6_axis_4", "joy_6_axis_5", "joy_6_axis_6", "joy_6_axis_7", "joy_6_axis_8", "joy_6_axis_9", "joy_6_axis_10", "joy_6_axis_11", "joy_6_axis_12", "joy_6_axis_13", "joy_6_axis_14", "joy_6_axis_15", "joy_6_axis_16", "joy_6_axis_17", "joy_6_axis_18", "joy_6_axis_19", "joy_6_axis_20", "joy_6_axis_21", "joy_6_axis_22", "joy_6_axis_23", "joy_6_axis_24", "joy_6_axis_25", "joy_6_axis_26", "joy_6_axis_27", "joy_7_axis_0", "joy_7_axis_1", "joy_7_axis_2", "joy_7_axis_3", "joy_7_axis_4", "joy_7_axis_5", "joy_7_axis_6", "joy_7_axis_7", "joy_7_axis_8", "joy_7_axis_9", "joy_7_axis_10", "joy_7_axis_11", "joy_7_axis_12", "joy_7_axis_13", "joy_7_axis_14", "joy_7_axis_15", "joy_7_axis_16", "joy_7_axis_17", "joy_7_axis_18", "joy_7_axis_19", "joy_7_axis_20", "joy_7_axis_21", "joy_7_axis_22", "joy_7_axis_23", "joy_7_axis_24", "joy_7_axis_25", "joy_7_axis_26", "joy_7_axis_27", "joy_8_axis_0", "joy_8_axis_1", "joy_8_axis_2", "joy_8_axis_3", "joy_8_axis_4", "joy_8_axis_5", "joy_8_axis_6", "joy_8_axis_7", "joy_8_axis_8", "joy_8_axis_9", "joy_8_axis_10", "joy_8_axis_11", "joy_8_axis_12", "joy_8_axis_13", "joy_8_axis_14", "joy_8_axis_15", "joy_8_axis_16", "joy_8_axis_17", "joy_8_axis_18", "joy_8_axis_19", "joy_8_axis_20", "joy_8_axis_21", "joy_8_axis_22", "joy_8_axis_23", "joy_8_axis_24", "joy_8_axis_25", "joy_8_axis_26", "joy_8_axis_27", "joy_9_axis_0", "joy_9_axis_1", "joy_9_axis_2", "joy_9_axis_3", "joy_9_axis_4", "joy_9_axis_5", "joy_9_axis_6", "joy_9_axis_7", "joy_9_axis_8", "joy_9_axis_9", "joy_9_axis_10", "joy_9_axis_11", "joy_9_axis_12", "joy_9_axis_13", "joy_9_axis_14", "joy_9_axis_15", "joy_9_axis_16", "joy_9_axis_17", "joy_9_axis_18", "joy_9_axis_19", "joy_9_axis_20", "joy_9_axis_21", "joy_9_axis_22", "joy_9_axis_23", "joy_9_axis_24", "joy_9_axis_25", "joy_9_axis_26", "joy_9_axis_27", "joy_10_axis_0", "joy_10_axis_1", "joy_10_axis_2", "joy_10_axis_3", "joy_10_axis_4", "joy_10_axis_5", "joy_10_axis_6", "joy_10_axis_7", "joy_10_axis_8", "joy_10_axis_9", "joy_10_axis_10", "joy_10_axis_11", "joy_10_axis_12", "joy_10_axis_13", "joy_10_axis_14", "joy_10_axis_15", "joy_10_axis_16", "joy_10_axis_17", "joy_10_axis_18", "joy_10_axis_19", "joy_10_axis_20", "joy_10_axis_21", "joy_10_axis_22", "joy_10_axis_23", "joy_10_axis_24", "joy_10_axis_25", "joy_10_axis_26", "joy_10_axis_27" };
     public static int JoystickCount { get { return UInput.GetJoystickNames().Where(x => (x != null && x != "")).Count(); } }
 
-    public static int ControllerCount { get { return Mathf.Min(JoystickCount + (Num.All(x=>x.config.Gamepad) ? 0 : 1), 4); } }
+    public static int ControllerCount { get { return Mathf.Min(JoystickCount + (Num.All(x=>x.Gamepad) ? 0 : 1), 4); } }
 
     public static bool IsTestingForInput { get { return InputMap.IsTestingForInput; } }
 
@@ -61,11 +61,11 @@ public partial class Input : MonoBehaviour
 
     private static ControllerStatus CheckStatus(InputController inputController)
     {
-        if (!inputController.config.Gamepad)
+        if (!inputController.Gamepad)
         {
             return ControllerStatus.Connected;
         }
-        return CheckIfControllerIsConnected(inputController.config.controllerNumber);
+        return CheckIfControllerIsConnected(inputController.controllerNumber);
     }
 
     int joyLength = 0;
@@ -107,11 +107,11 @@ public partial class Input : MonoBehaviour
                         bool isFree = true;
                         for (int ii = 0; ii < 4; ii++)
                         {
-                            isFree &= Num[ii].config.controllerNumber != x;
+                            isFree &= Num[ii].controllerNumber != x;
                         }
                         if (isFree)
                         {
-                            Num[i].config.controllerNumber = x;
+                            Num[i].controllerNumber = x;
                             Num[i].InitializeControls();
                             Num[i].controllerStatus = ControllerStatus.Connected;
                             JoystickAdded(i);
@@ -134,13 +134,13 @@ public partial class Input : MonoBehaviour
         OnControllerDisconnected.Invoke(controllerNum);
     }
 
-    public static string DetectAxes(InputConfig _inputConfig)
+    public static string DetectAxes(InputController _inputController)
     {
         string[] restrictions = new string[0];
         string[] requirements = new string[0];
-        if (_inputConfig.Gamepad)
+        if (_inputController.Gamepad)
         {
-            requirements = new string[] { ("joy_" + _inputConfig.controllerNumber.ToString() + "_axis_") };
+            requirements = new string[] { ("joy_" + _inputController.controllerNumber.ToString() + "_axis_") };
         }
         else
         {
@@ -149,13 +149,13 @@ public partial class Input : MonoBehaviour
         return DetectAxes(requirements, restrictions);
     }
 
-    public static string DetectAxes(InputConfig _inputConfig, out float axisValue)
+    public static string DetectAxes(InputController _inputController, out float axisValue)
     {
         string[] restrictions = new string[0];
         string[] requirements = new string[0];
-        if (_inputConfig.Gamepad)
+        if (_inputController.Gamepad)
         {
-            requirements = new string[] { ("joy_" + _inputConfig.controllerNumber.ToString() + "_axis_") };
+            requirements = new string[] { ("joy_" + _inputController.controllerNumber.ToString() + "_axis_") };
         }
         else
         {
@@ -209,13 +209,13 @@ public partial class Input : MonoBehaviour
         return DetectAxes(out axisValue, required, restrictions);
     }
 
-    public static string DetectButton(InputConfig _inputConfig)
+    public static string DetectButton(InputController _inputController)
     {
         string[] restrictions = new string[0];
         string[] requirements = new string[0];
-        if (_inputConfig.Gamepad)
+        if (_inputController.Gamepad)
         {
-            requirements = new string[] { ("Joystick" + (_inputConfig.controllerNumber + 1).ToString() + "Button") };
+            requirements = new string[] { ("Joystick" + (_inputController.controllerNumber + 1).ToString() + "Button") };
         }
         else
         {
@@ -259,20 +259,20 @@ public partial class Input : MonoBehaviour
 
 
     //************Save & Load********************//
-    private static InputConfig[] inputConfigs;
+
 
     private static string SavePath { get { return Application.persistentDataPath + "/InputConfig.dat"; } }
 
     public static void SaveSettings()
     {
-        InputConfig[] data;
+        InputController[] data;
         if (num != null)
         {
-            data = (InputConfig[])num.Select(x => x.SaveControls()).ToArray().Clone();
+            data = (InputController[])num.Clone();
         }
         else
         {
-            data = (InputConfig[]) inputConfigs.Clone();
+            data = InputController.DefaultInputControllers();
         }
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Open(SavePath, FileMode.Create);
@@ -292,7 +292,7 @@ public partial class Input : MonoBehaviour
             file = File.Open(SavePath, FileMode.Open);
             try
             {
-                inputConfigs = (InputConfig[])bf.Deserialize(file);
+                num = (InputController[])bf.Deserialize(file);
                 file.Close();
                 //Debug.Log("Loaded Save at: " + SavePath);
             }
@@ -305,11 +305,10 @@ public partial class Input : MonoBehaviour
         }
         else
         {
-            inputConfigs = InputConfig.DefaultInputConfigs();
+            num = InputController.DefaultInputControllers();
             //Debug.Log("LoadedDefaults");
         }
         SaveSettings();
-        CreateControllers(inputConfigs);
         //Debug.LogError(new String(Input.GetJoystickNames().SelectMany(x => "JoyStickName: " + x + "\n").ToArray()));
     }
 
@@ -317,17 +316,6 @@ public partial class Input : MonoBehaviour
     {
         File.Delete(SavePath);
         LoadSettings();
-    }
-
-    private static void CreateControllers(InputConfig[] inputConfigs)
-    {
-        Num = new InputController[inputConfigs.Length];
-
-        for (int i = 0; i < inputConfigs.Length; i++)
-        {
-            inputConfigs[i].controllerNumber = 10;
-            Num[i] = new InputController(inputConfigs[i]);
-        }
     }
 }
 
@@ -451,10 +439,15 @@ public enum ControllerStatus { Disconnected, Connected }
 public class InputController
 {
     public ControllerStatus controllerStatus;
-    public InputConfig config;
+    public bool Gamepad = true;
+    public int controllerNumber = 0;
+    [NonSerialized]
     private ButtonMap[] buttonMaps;
+    [NonSerialized]
     private AxisMap[] axisMaps;
+    [NonSerialized]
     private DualAxisMap[] dualAxisMaps;
+    [NonSerialized]
     private InputMap[] inputMaps;
     public ButtonMap Start;
     public ButtonMap AltStart;
@@ -500,7 +493,7 @@ public class InputController
         }
     }
 
-    public DualAxisMap[] DualAxisMap
+    public DualAxisMap[] DualAxisMaps
     {
         get
         {
@@ -534,48 +527,31 @@ public class InputController
         }
     }
 
-    public InputController(InputConfig _inputConfig)
-    {
-        config = _inputConfig;
-        Start = new ButtonMap(config.Start, config);
-        AltStart = new ButtonMap(config.AltStart, config);
-        Confirm = new ButtonMap(config.Confirm, config);
-        Back = new ButtonMap(config.Back, config);
-        Jump = new ButtonMap(config.Jump, config);
-        Reload = new ButtonMap(config.Reload, config);
-        SwapPrimary = new ButtonMap(config.SwapPrimary, config);
-        SwapSecondary = new ButtonMap(config.SwapSecondary, config);
-        Crouch = new ButtonMap(config.Crouch, config);
-        Zoom = new ButtonMap(config.Zoom, config);
-        UsePrimary = new AxisMap(config.UsePrimary, config);
-        UseSecondary = new AxisMap(config.UseSecondary, config);
-        Movement = new DualAxisMap(config.Movement, config);
-        Look = new DualAxisMap(config.Look, config);
-    }
+    public InputController() { }
 
     public void InitializeControls()
     {
-        Start .ReInit(config.Start, config);
-        AltStart .ReInit(config.AltStart, config);
-        Confirm .ReInit(config.Confirm, config);
-        Back .ReInit(config.Back, config);
-        Jump .ReInit(config.Jump, config);
-        Reload .ReInit(config.Reload, config);
-        SwapPrimary .ReInit(config.SwapPrimary, config);
-        SwapSecondary .ReInit(config.SwapSecondary, config);
-        Crouch .ReInit(config.Crouch, config);
-        Zoom .ReInit(config.Zoom, config);
-        UsePrimary .ReInit(config.UsePrimary, config);
-        UseSecondary .ReInit(config.UseSecondary, config);
-        Movement .ReInit(config.Movement, config);
-        Look .ReInit(config.Look, config);
+        Start .ReInit();
+        AltStart .ReInit();
+        Confirm .ReInit();
+        Back .ReInit();
+        Jump .ReInit();
+        Reload .ReInit();
+        SwapPrimary .ReInit();
+        SwapSecondary .ReInit();
+        Crouch .ReInit();
+        Zoom .ReInit();
+        UsePrimary .ReInit();
+        UseSecondary .ReInit();
+        Movement .ReInit();
+        Look .ReInit();
     }
 
     public void SwitchToGamePad()
     {
         if (Input.Num[0] == this)
         {
-            config = InputConfig.Default();
+            RevertToDefaultControls();
             InitializeControls();
             if (Input.JoystickCount < 4)
             {
@@ -583,7 +559,6 @@ public class InputController
                 {
                     if (Input.Num[i].controllerStatus == ControllerStatus.Connected)
                     {
-                        config = Input.Num[i].config;
                         InitializeControls();
                         controllerStatus = ControllerStatus.Connected;
                         Input.Num[i].DisconnectController();
@@ -598,7 +573,7 @@ public class InputController
     {
         if (Input.Num[0] == this)
         {
-            config = InputConfig.DefaultPC();
+            RevertToDefaultPCControls();
             InitializeControls();
             controllerStatus = ControllerStatus.Connected;
         }
@@ -606,7 +581,7 @@ public class InputController
 
     public void DisconnectController()
     {
-        config.controllerNumber = 10;
+        controllerNumber = 10;
         InitializeControls();
     }
 
@@ -618,41 +593,108 @@ public class InputController
         }
     }
 
-    public InputConfig SaveControls()
+    public int[] SerializeToInts()
     {
-        config.Start = Start.ButtonMapData;
-        config.AltStart = AltStart.ButtonMapData;
-        config.Confirm = Confirm.ButtonMapData;
-        config.Back = Back.ButtonMapData;
-        config.Jump = Jump.ButtonMapData;
-        config.Reload = Reload.ButtonMapData;
-        config.SwapPrimary = SwapPrimary.ButtonMapData;
-        config.SwapSecondary = SwapSecondary.ButtonMapData;
-        config.Crouch = Crouch.ButtonMapData;
-        config.Zoom = Zoom.ButtonMapData;
-        config.UsePrimary = UsePrimary.AxisMapData;
-        config.UseSecondary = UseSecondary.AxisMapData;
-        config.Movement = Movement.DualAxisMapData;
-        config.Look = Look.DualAxisMapData;
-        return config;
-    }
-}
+        List<int> datas = new List<int>(ButtonMaps.Length*3+AxisMaps.Length*3 + DualAxisMaps.Length*6);
 
+        for(int i = 0; i < InputMaps.Length; i++)
+        {
+            datas.AddRange(InputMaps[i].SerializeToInts());
+        }
+        return datas.ToArray();
+    }
+
+    private void RevertToDefaultControls()
+    {
+        Gamepad = true;
+        controllerNumber = 1;
+        Start = new ButtonMap(new ButtonMapData() { name = "Start", buttonMapName = "7" }, this);
+        AltStart = new ButtonMap(new ButtonMapData() { name = "Alt Start", buttonMapName = "6" }, this);
+        Confirm = new ButtonMap(new ButtonMapData() { name = "Confirm", buttonMapName = "0" }, this);
+        Back = new ButtonMap(new ButtonMapData() { name = "Back", buttonMapName = "1" }, this);
+        Jump = new ButtonMap(new ButtonMapData() { name = "Jump", buttonMapName = "0" }, this);
+        Reload = new ButtonMap(new ButtonMapData() { name = "Reload/Interact", buttonMapName = "2" }, this);
+        SwapPrimary = new ButtonMap(new ButtonMapData() { name = "Swap Primary", buttonMapName = "3" }, this);
+        SwapSecondary = new ButtonMap(new ButtonMapData() { name = "Swap Secondary", buttonMapName = "1" }, this);
+        Crouch = new ButtonMap(new ButtonMapData() { name = "Crouch", buttonMapName = "8" }, this);
+        Zoom = new ButtonMap(new ButtonMapData() { name = "Zoom", buttonMapName = "9" }, this);
+        UsePrimary = new AxisMap(new AxisMapData() { name = "Use Primary", positiveAxisName = "9", is0To1Axis = true }, this);
+        UseSecondary = new AxisMap(new AxisMapData() { name = "Use Secondary", positiveAxisName = "8", is0To1Axis = true }, this);
+        Movement = new DualAxisMap(new DualAxisMapData() { name = "Movement", xAxisMapData = new AxisMapData() { positiveAxisName = "0" }, yAxisMapData = new AxisMapData() { positiveAxisName = "1" } }, this);
+        Look = new DualAxisMap(new DualAxisMapData() { name = "Movement", xAxisMapData = new AxisMapData() { positiveAxisName = "3" }, yAxisMapData = new AxisMapData() { positiveAxisName = "4" } }, this);
+    }
+
+    private void RevertToDefaultPCControls()
+    {
+        Gamepad = false;
+        controllerNumber = 0;
+        Start = new ButtonMap(new ButtonMapData() { name = "Start", buttonMapName = "escape" }, this);
+        AltStart = new ButtonMap(new ButtonMapData() { name = "Alt Start", buttonMapName = "tab" }, this);
+        Confirm = new ButtonMap(new ButtonMapData() { name = "Confirm", buttonMapName = "enter" }, this);
+        Back = new ButtonMap(new ButtonMapData() { name = "Back", buttonMapName = "backspace" }, this);
+        Jump = new ButtonMap(new ButtonMapData() { name = "Jump", buttonMapName = "space" }, this);
+        Reload = new ButtonMap(new ButtonMapData() { name = "Reload/Interact", buttonMapName = "r" }, this);
+        SwapPrimary = new ButtonMap(new ButtonMapData() { name = "Swap Primary", buttonMapName = "q" }, this);
+        SwapSecondary = new ButtonMap(new ButtonMapData() { name = "Swap Secondary", buttonMapName = "e" }, this);
+        Crouch = new ButtonMap(new ButtonMapData() { name = "Crouch", buttonMapName = "left ctrl" }, this);
+        Zoom = new ButtonMap(new ButtonMapData() { name = "Zoom", buttonMapName = "mouse 2" }, this);
+        UsePrimary = new AxisMap(new AxisMapData() { name = "Use Primary", positiveAxisName = "mouse 0", isVirtual = true, is0To1Axis = true }, this);
+        UseSecondary = new AxisMap(new AxisMapData() { name = "Use Secondary", positiveAxisName = "mouse 1", isVirtual = true, is0To1Axis = true }, this);
+        Movement = new DualAxisMap(new DualAxisMapData() { name = "Movement", xAxisMapData = new AxisMapData() { positiveAxisName = "d", negativeAxisName = "a", isVirtual = true }, yAxisMapData = new AxisMapData() { positiveAxisName = "w", negativeAxisName = "s", isVirtual = true } }, this);
+        Look = new DualAxisMap(new DualAxisMapData() { name = "Look", xAxisMapData = new AxisMapData() { positiveAxisName = "mouse_axis_0" }, yAxisMapData = new AxisMapData() { positiveAxisName = "mouse_axis_1" } }, this);
+    }
+
+        public static InputController Default()
+    {
+        InputController inputController = new InputController();
+        inputController.RevertToDefaultControls();
+        return inputController;
+    }
+
+    public static InputController DefaultPC()
+    {
+        InputController inputController = new InputController();
+        inputController.RevertToDefaultPCControls();
+        return inputController;
+    }
+
+    public static InputController[] DefaultInputControllers()
+    {
+#if UNITY_STANDALONE
+        InputController[] configs = (new InputController[] { InputController.DefaultPC() }).Concat(Enumerable.Repeat(InputController.Default(), 3)).ToArray();
+        for (int i = 0; i < configs.Length; i++)
+        {
+            configs[i].controllerNumber = Mathf.Max(i - 1, 0);
+        }
+        return configs;
+#else
+        InputController[] configs = Enumerable.Repeat(InputController.Default(), 4).ToArray();
+        for(int i = 0; i < configs.Length; i++)
+        {
+            configs[i].controllerNumber = i;
+        }
+        return configs;
+#endif
+    }
+
+}
+[System.Serializable]
 public abstract class InputMap
 {
-    protected InputConfig config;
+    protected InputController config;
     public static bool IsTestingForInput { get; protected set; }
     public string MapMessage { get; protected set; }
     protected const int InputCheckTime = 5;
 
-    public InputMap(InputConfig _inputConfig)
+    public InputMap(InputController _inputController)
     {
-        config = _inputConfig;
+        config = _inputController;
     }
 
     public abstract IEnumerator TestForInput();
-}
-
+    public abstract int[] SerializeToInts();
+    }
+[System.Serializable]
 public class ButtonMap : InputMap
 {
     public string Name { get { return buttonMapData.name; } }
@@ -672,17 +714,15 @@ public class ButtonMap : InputMap
     private int lastUpdate = 0;
     
 
-    public ButtonMap(ButtonMapData _buttonMapData, InputConfig _config):base(_config)
+    public ButtonMap(ButtonMapData _buttonMapData, InputController _config):base(_config)
     {
         buttonMapData = _buttonMapData;
         MapMessage = ButtonMapName;
         UpdateButtonString();
     }
 
-    public void ReInit(ButtonMapData _buttonMapData, InputConfig _config)
+    public void ReInit()
     {
-        config = _config;
-        buttonMapData = _buttonMapData;
         MapMessage = ButtonMapName;
         UpdateButtonString();
     }
@@ -818,8 +858,13 @@ public class ButtonMap : InputMap
         }
         return MapMessage;
     }
-}
 
+    public override int[] SerializeToInts()
+    {
+        return new int[] { fixed_DOWN ? 1 : 0, fixed_UP ? 1 : 0, fixed_Val ? 1 : 0 };
+    }
+}
+[System.Serializable]
 public class AxisMap : InputMap
 {
     
@@ -840,7 +885,7 @@ public class AxisMap : InputMap
     private string PostiveAxisString = "";
     private string NegativeAxisString = "";
 
-    public AxisMap(AxisMapData _axisMapData, InputConfig _inputConfig):base(_inputConfig)
+    public AxisMap(AxisMapData _axisMapData, InputController _inputController):base(_inputController)
     {
         axisMapData = _axisMapData;
         if(axisMapData.sensitivity == 0) { axisMapData.sensitivity = 1; }
@@ -850,10 +895,8 @@ public class AxisMap : InputMap
     }
 
     
-    public void ReInit(AxisMapData _axisMapData, InputConfig _config)
+    public void ReInit()
     {
-        config = _config;
-        axisMapData = _axisMapData;
         if (axisMapData.sensitivity == 0) { axisMapData.sensitivity = 1; }
         if (Name == null) { axisMapData.name = ""; }
         MapMessage = axisMapData.negativeAxisName == null ? PositiveAxisName : "(-)" + NegativeAxisName + " | (+)" + PositiveAxisName;
@@ -1019,8 +1062,13 @@ public class AxisMap : InputMap
         }
         return MapMessage;
     }
-}
 
+    public override int[] SerializeToInts()
+    {
+        return new int[] { (int)this*1000 };
+    }
+}
+[System.Serializable]
 public class DualAxisMap:InputMap
 {
     public string Name { get { return dualAxisMapData.name; } }
@@ -1032,7 +1080,7 @@ public class DualAxisMap:InputMap
     public DualAxisMapData DualAxisMapData { get { return dualAxisMapData; } }
     private DualAxisMapData dualAxisMapData;
 
-    public DualAxisMap(DualAxisMapData _dualAxisMapData, InputConfig _inputConfig) : base(_inputConfig)
+    public DualAxisMap(DualAxisMapData _dualAxisMapData, InputController _inputController) : base(_inputController)
     {
         dualAxisMapData = _dualAxisMapData;
         xAxisMap = new AxisMap(dualAxisMapData.xAxisMapData, config);
@@ -1040,12 +1088,10 @@ public class DualAxisMap:InputMap
         MapMessage = "X Axis: " + xAxisMap.ToString() + "\nY Axis: " + yAxisMap.ToString();
     }
 
-    public void ReInit(DualAxisMapData _dualAxisMapData, InputConfig _config)
+    public void ReInit()
     {
-        config = _config;
-        dualAxisMapData = _dualAxisMapData;
-        xAxisMap .ReInit(dualAxisMapData.xAxisMapData, config);
-        yAxisMap .ReInit(dualAxisMapData.yAxisMapData, config);
+        xAxisMap .ReInit();
+        yAxisMap .ReInit();
         MapMessage = "X Axis: " + xAxisMap.ToString() + "\nY Axis: " + yAxisMap.ToString();
     }
 
@@ -1082,6 +1128,10 @@ public class DualAxisMap:InputMap
     public override string ToString()
     {
         return "X Axis: " + xAxisMap.ToString() + "\nY Axis: " + yAxisMap.ToString();
+    }
+    public override int[] SerializeToInts()
+    {
+        return new int[] { (int)xAxisMap * 1000, (int)yAxisMap * 1000 };
     }
 }
 
