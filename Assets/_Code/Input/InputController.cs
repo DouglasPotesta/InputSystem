@@ -42,7 +42,18 @@ public class InputController : ScriptableObject
     //public AxisMap UseSecondary;
     //public DualAxisMap Movement;
     //public DualAxisMap Look;
-    
+
+
+
+    private FieldInfo[] InputFields { get { if(inputFields == null) { inputFields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).Where(x => x.FieldType.IsSubclassOf(typeof(InputMap))).OrderBy(y => y.Name).ToArray(); } return inputFields;}}
+    private FieldInfo[] inputFields;
+    private FieldInfo[] ButtonFields { get { if(buttonFields== null) { buttonFields = InputFields.Where(x => x.FieldType == typeof(ButtonMap)).ToArray(); }return buttonFields; } }
+    private FieldInfo[] buttonFields;
+    private FieldInfo[] AxisFields { get { if (axisFields == null) { axisFields = InputFields.Where(x => x.FieldType == typeof(AxisMap)).ToArray(); }return axisFields; } }
+    private FieldInfo[] axisFields;
+    private FieldInfo[] DualAxisFields { get { if(dualAxisFields == null) { dualAxisFields = InputFields.Where(x => x.FieldType == typeof(DualAxisMap)).ToArray(); } return dualAxisFields; } }
+    private FieldInfo[] dualAxisFields;
+
     /// <summary>
     /// Accessor for all button maps on the controller
     /// </summary>
@@ -50,16 +61,20 @@ public class InputController : ScriptableObject
     {
         get
         {
-                FieldInfo[] fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).Where(x => x.FieldType == typeof(ButtonMap)).OrderBy(y => y.Name).ToArray();
-                buttonMaps = fields.Select(y => {
+            if (buttonMaps == null)
+            {
+                buttonMaps = ButtonFields.Select(y =>
+                {
                     object val = y.GetValue(this);
                     if (val == null)
                     {
-                        val = new ButtonMap(new ButtonMapData(), this);
+                        val = new ButtonMap(new ButtonMapData() { name = y.Name, buttonMapName = "0"}, this);
+                        
                         y.SetValue(this, val);
                     }
                     return (ButtonMap)y.GetValue(this);
                 }).ToArray();
+            }
             return buttonMaps;
         }
     }
@@ -71,22 +86,20 @@ public class InputController : ScriptableObject
     {
         get
         {
-            FieldInfo[] fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).Where(x => x.FieldType == typeof(AxisMap)).OrderBy(y => y.Name).ToArray();
-            axisMaps = fields.Select(y => {
-                object val = y.GetValue(this);
-                if (val == null)
+            if (axisMaps == null)
+            {
+                axisMaps = AxisFields.Select(y =>
                 {
-                    val = new AxisMap(new AxisMapData(), this);
-                    y.SetValue(this, val);
-                }
-                return (AxisMap)y.GetValue(this);
-            }).ToArray();
+                    object val = y.GetValue(this);
+                    if (val == null)
+                    {
+                        val = new AxisMap(new AxisMapData() { name = y.Name, negativeAxisName = "", positiveAxisName = "0" }, this);
+                        y.SetValue(this, val);
+                    }
+                    return (AxisMap)y.GetValue(this);
+                }).ToArray();
+            }
             return axisMaps;
-        }
-
-        set
-        {
-            axisMaps = value;
         }
     }
 
@@ -97,22 +110,20 @@ public class InputController : ScriptableObject
     {
         get
         {
-            FieldInfo[] fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).Where(x => x.FieldType == typeof(DualAxisMap)).OrderBy(y => y.Name).ToArray();
-            dualAxisMaps = fields.Select(y => {
-                object val = y.GetValue(this);
-                if (val == null)
+            if (dualAxisMaps == null)
+            {
+                dualAxisMaps = DualAxisFields.Select(y =>
                 {
-                    val = new DualAxisMap(new DualAxisMapData(), this);
-                    y.SetValue(this, val);
-                }
-                return (DualAxisMap)y.GetValue(this);
-            }).ToArray();
+                    object val = y.GetValue(this);
+                    if (val == null)
+                    {
+                        val = new DualAxisMap(new DualAxisMapData() { name = y.Name, xAxisMapData = new AxisMapData() { negativeAxisName = "", positiveAxisName = "0", name = "X-Axis"}, yAxisMapData = new AxisMapData() { negativeAxisName = "", positiveAxisName = "1", name = "Y-Axis"} }, this);
+                        y.SetValue(this, val);
+                    }
+                    return (DualAxisMap)y.GetValue(this);
+                }).ToArray();
+            }
             return dualAxisMaps;
-        }
-
-        set
-        {
-            dualAxisMaps = value;
         }
     }
 
@@ -125,36 +136,17 @@ public class InputController : ScriptableObject
         {
             if (inputMaps == null)
             {
-                inputMaps = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).Where(x => x.FieldType.IsSubclassOf(typeof(InputMap))).OrderBy(y => y.Name).Select(y => (InputMap)y.GetValue(this)).ToArray();
+                inputMaps = new InputMap[0].Concat(ButtonMaps).Concat(AxisMaps).Concat(DualAxisMaps).ToArray();
             }
             return inputMaps;
         }
-
-        set
-        {
-            inputMaps = value;
-        }
     }
+
     /// <summary>
     /// Initializes input maps for getting their string names.
     /// </summary>
     public void InitializeControls()
     {
-        for (int i = 0; i < ButtonMaps.Length; i++)
-        {
-            if (ButtonMaps[i] == null)
-                ButtonMaps[i] = new ButtonMap(new ButtonMapData(), this);
-        }
-        for (int i = 0; i < AxisMaps.Length; i++)
-        {
-            if (AxisMaps[i] == null)
-                AxisMaps[i] = new AxisMap(new AxisMapData(), this);
-        }
-        for (int i = 0; i < DualAxisMaps.Length; i++)
-        {
-            if (DualAxisMaps[i] == null)
-                DualAxisMaps[i] = new DualAxisMap(new DualAxisMapData(), this);
-        }
         for (int i = 0; i < InputMaps.Length; i++)
         {
             InputMaps[i].ReInit();

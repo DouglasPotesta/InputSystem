@@ -354,6 +354,7 @@ public class InputMap
 {
     protected InputController controller;
     public static bool IsTestingForInput { get; protected set; }
+    public virtual string Name { get { return ""; } }
     public string MapMessage { get{ return mapMessage; } protected set { mapMessage = value; } }
     private string mapMessage = "InputMap";
     protected const int InputCheckTime = 5;
@@ -370,7 +371,7 @@ public class InputMap
 [System.Serializable]
 public class ButtonMap : InputMap
 {
-    public string Name { get { return buttonMapData.name; } }
+    public override string Name { get { return buttonMapData.name; } }
     public string ButtonMapName { get { return buttonMapData.buttonMapName; } }
     public ButtonMapData ButtonMapData { get { return buttonMapData; } }
     private ButtonMapData buttonMapData;
@@ -556,7 +557,7 @@ public class AxisMap : InputMap
     private const string PositiveAxisMessage = "Push in the positive direction...";
     private const string NegativeAxisMessage = "Push in the negative direction...";
 
-    public string Name { get { return axisMapData.name; } }
+    public override string Name { get { return axisMapData.name; } }
     public bool IsInverted { get { return axisMapData.isInverted; } set { axisMapData.isInverted = value; } }
     public bool IsVirtual { get { return axisMapData.isVirtual; } }
     public string PositiveAxisName { get { return axisMapData.positiveAxisName; } }
@@ -758,7 +759,7 @@ public class AxisMap : InputMap
 [System.Serializable]
 public class DualAxisMap:InputMap
 {
-    public string Name { get { return dualAxisMapData.name; } }
+    public override string Name { get { return dualAxisMapData.name; } }
 
     private const string HORIZONTAL_MESSAGE = "Horizontally ";
     private const string VERTICAL_MESSAGE = "Vertically ";

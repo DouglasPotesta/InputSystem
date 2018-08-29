@@ -90,12 +90,111 @@ public class DefaultsEditor : Editor {
             targ.PlatformInputs.Remove(platFormDefaults.Key);
             targ.PlatformInputs.Add(newRuntimePlatform, (InputController)CreateInstance(targ.inputControllerType));
         }
-
+        EditorGUILayout.LabelField("Buttons", EditorStyles.miniBoldLabel);
         for(int i = 0; i < platFormDefaults.Value.ButtonMaps.Length; i++)
         {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(platFormDefaults.Value.ButtonMaps[i].Name, GUILayout.MinWidth(144));
             ButtonMapsGUI(platFormDefaults.Value.ButtonMaps[i], newRuntimePlatform);
+            EditorGUILayout.EndHorizontal();
+        }
+        for (int i = 0; i < platFormDefaults.Value.AxisMaps.Length; i++)
+        {
+            EditorGUILayout.LabelField(platFormDefaults.Value.AxisMaps[i].Name, GUILayout.MinWidth(144));
+            AxisMapsGUI(platFormDefaults.Value.AxisMaps[i], newRuntimePlatform);
         }
     }
+
+    private void AxisMapsGUI(AxisMap axisMap, RuntimePlatform newRuntimePlatform)
+    {
+        int baseIndentLevel = EditorGUI.indentLevel;
+
+        if(GUILayout.Button(axisMap.IsVirtual?"Switch To Real Axis":"Switch to Virtual Axis"))
+        {
+            Undo.RecordObject(target, ((axisMap.IsVirtual ? "Changed to Real Axis for": "Changed to Virtual Axis") + axisMap.Name));
+            AxisMapData axisMapData = axisMap.AxisMapData;
+            axisMapData.isVirtual = !axisMapData.isVirtual;
+            axisMapData.negativeAxisName = axisMapData.isVirtual ? "0" : "";
+            axisMapData.positiveAxisName = axisMapData.isVirtual ? "3" : "0";
+            typeof(AxisMap).GetField("axisMapData", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).SetValue(axisMap, axisMapData);
+            EditorUtility.SetDirty(target);
+        }
+        if (axisMap.IsVirtual)
+        {
+            EditorGUI.BeginChangeCheck();
+            EditorGUI.indentLevel = baseIndentLevel + 1;
+            bool isInverted = EditorGUILayout.Toggle("Invert Axis", axisMap.IsInverted);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(target, ("Changed Inversion of " + axisMap.Name));
+                AxisMapData axisMapData = axisMap.AxisMapData;
+                axisMapData.isInverted = isInverted;
+                typeof(AxisMap).GetField("axisMapData", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).SetValue(axisMap, axisMapData);
+                EditorUtility.SetDirty(target);
+            }
+        }
+        
+        Dictionary<string, string> joyAxes = axisMap.IsVirtual? JoyPlatformMaps.GetButtonsForPlatform(newRuntimePlatform): JoyPlatformMaps.GetAxisForPlatform(newRuntimePlatform);
+        joyAxes.Add("", "Not Active");
+        string[] joyAxisArrayNames = joyAxes.Select(x => x.Key + "  |  " + x.Value).OrderBy(x => x).ToArray();
+
+        EditorGUILayout.BeginHorizontal();
+        EditorGUI.indentLevel = baseIndentLevel+ 1;
+        EditorGUILayout.LabelField("Negative Axis");
+        EditorGUI.BeginChangeCheck();
+        int newBut = EditorGUILayout.Popup(joyAxes.Keys.OrderBy(x => x).ToList().IndexOf(axisMap.AxisMapData.negativeAxisName), (joyAxisArrayNames).ToArray());
+        EditorGUILayout.EndHorizontal();
+        EditorGUI.indentLevel = baseIndentLevel + 2;
+        EditorGUILayout.BeginHorizontal();
+        if (axisMap.NegativeAxisName == "" || axisMap.AxisMapData.isVirtual) { GUI.enabled = false; }
+        EditorGUILayout.LabelField("Is Inverted");
+        GUILayout.FlexibleSpace();
+        bool isNegativeAxisInverted = EditorGUILayout.Toggle(axisMap.AxisMapData.isNegativeAxisInverted);
+        EditorGUILayout.EndHorizontal();
+        GUI.enabled = true;
+        if (EditorGUI.EndChangeCheck())
+        {
+            Undo.RecordObject(target, ("Changed mapping of " + axisMap.Name));
+            string val = joyAxes.Keys.ToArray().OrderBy(x => x).ToArray()[newBut];
+            AxisMapData axisMapData = axisMap.AxisMapData;
+            axisMapData.negativeAxisName = val;
+            axisMapData.isNegativeAxisInverted = isNegativeAxisInverted && !axisMapData.isVirtual;
+            typeof(AxisMap).GetField("axisMapData", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).SetValue(axisMap, axisMapData);
+            EditorUtility.SetDirty(target);
+        }
+
+        joyAxes.Remove("");
+        joyAxisArrayNames = joyAxes.Select(x => x.Key + "  |  " + x.Value).OrderBy(x => x).ToArray();
+
+
+        EditorGUILayout.BeginHorizontal();
+        EditorGUI.indentLevel = baseIndentLevel+1;
+        EditorGUILayout.LabelField("Positive Axis");
+        EditorGUI.BeginChangeCheck();
+        newBut = EditorGUILayout.Popup(joyAxes.Keys.OrderBy(x => x).ToList().IndexOf(axisMap.AxisMapData.positiveAxisName), joyAxisArrayNames);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
+        EditorGUI.indentLevel = baseIndentLevel + 2;
+        GUI.enabled = !axisMap.AxisMapData.isVirtual;
+        EditorGUILayout.LabelField("Is Inverted");
+        GUILayout.FlexibleSpace();
+        bool isPostiveAxisInverted = EditorGUILayout.Toggle((axisMap.AxisMapData.negativeAxisName == "" && !axisMap.AxisMapData.isVirtual ? axisMap.AxisMapData.isInverted:axisMap.AxisMapData.isPositiveAxisInverted), GUILayout.ExpandWidth(true));
+        EditorGUILayout.EndHorizontal();
+        GUI.enabled = true;
+        if (EditorGUI.EndChangeCheck())
+        {
+            Undo.RecordObject(target, ("Changed mapping of " + axisMap.Name));
+            string val = joyAxes.Keys.ToArray().OrderBy(x => x).ToArray()[newBut];
+            AxisMapData axisMapData = axisMap.AxisMapData;
+            axisMapData.positiveAxisName = val;
+            if (axisMapData.negativeAxisName == "") { axisMapData.isInverted = isPostiveAxisInverted; axisMapData.isPositiveAxisInverted = false; }
+            else { axisMapData.isPositiveAxisInverted = isPostiveAxisInverted && !axisMapData.isVirtual; }
+            typeof(AxisMap).GetField("axisMapData", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).SetValue(axisMap, axisMapData);
+            EditorUtility.SetDirty(target);
+        }
+        EditorGUI.indentLevel = baseIndentLevel;
+    }
+
     public void ButtonMapsGUI(ButtonMap buttonMap, RuntimePlatform runtimePlatform)
     {
         Dictionary<string, string> joyButtons = JoyPlatformMaps.GetButtonsForPlatform(runtimePlatform);
@@ -120,15 +219,29 @@ public class DefaultsEditor : Editor {
 public class JoyPlatformMaps
 {
 
-    public static Dictionary<string, string> GenericButtons { get
-        {
-            if(genericButtons == null)
-            {
-                genericButtons = Enum.GetNames(typeof(KeyCode)).Where(x => x.ToLower().Contains("joy")).ToDictionary(x => x, x => x);
-            }
-            return genericButtons;
-        } }
-    private static Dictionary<string, string> genericButtons;
+    public static readonly Dictionary<string, string> GenericButtons = new Dictionary<string, string>
+    {
+            {"0","0" },
+            {"1","1"},
+            {"2","2" },
+            {"3","3"},
+            {"4","4" },
+            {"5","5" },
+            {"6","6" },
+            {"7","7"},
+            {"8","8" },
+            {"9","9"},
+            {"10","10" },
+            {"11","11"},
+            {"12","12" },
+            {"13","13" },
+            {"14","14" },
+            {"15","15"},
+            {"16","16" },
+            {"17","17"},
+            {"18","18" },
+            {"19","19"},
+    };
 
     public static readonly Dictionary<string, string> XboxWindowsAxes = new Dictionary<string, string>
     {
@@ -136,11 +249,11 @@ public class JoyPlatformMaps
             {"1","Left Stick ↓↑" },
             {"3","Right Stick ←→" },
             {"4","Right Stick ↓↑" },
-            {"6","D-Pad ↓↑" },
+            {"6","D-Pad ↓↑)" },
             {"5","D-Pad ←→" },
-            {"9","Right Trigger" },
-            {"8","Left Trigger" },
-            {"10","Right Trigger" },
+            {"9","Right Trigger →" },
+            {"8","Left Trigger →" },
+            {"10","Right Trigger →" },
     };
 
     public static readonly Dictionary<string, string> XboxMacAxes = new Dictionary<string, string>
@@ -149,8 +262,8 @@ public class JoyPlatformMaps
             {"1","Left Stick ↓↑" },
             {"3","Right Stick ↓↑" },
             {"4","Right Stick ←→" },
-            {"5","Left Trigger" },
-            {"6","Right Trigger" },
+            {"5","Left Trigger →" },
+            {"6","Right Trigger →" },
     };
 
     public static readonly Dictionary<string, string> XboxLinuxAxes = new Dictionary<string, string>()
@@ -161,8 +274,40 @@ public class JoyPlatformMaps
             {"5","Right Stick ←→" },
             {"7","D-Pad ↓↑" },
             {"8","D-Pad ←→" },
-            {"3","Left Trigger" },
-            {"6","Right Trigger" },
+            {"3","Left Trigger →" },
+            {"6","Right Trigger →" },
+    };
+
+    public static readonly Dictionary<string, string> GenericAxes = new Dictionary<string, string>()
+    {
+            {"0","0" },
+            {"1","1"},
+            {"2","2" },
+            {"3","3"},
+            {"4","4" },
+            {"5","5" },
+            {"6","6" },
+            {"7","7"},
+            {"8","8" },
+            {"9","9"},
+            {"10","10" },
+            {"11","11"},
+            {"12","12" },
+            {"13","13" },
+            {"14","14" },
+            {"15","15"},
+            {"16","16" },
+            {"17","17"},
+            {"18","18" },
+            {"19","19"},
+            {"20","20" },
+            {"21","21" },
+            {"22","22" },
+            {"23","23"},
+            {"24","24" },
+            {"25","25"},
+            {"26","26" },
+            {"27","27"},
     };
 
     public static readonly Dictionary<string, string> WebGLAxes = new Dictionary<string, string>()
@@ -280,5 +425,40 @@ new Dictionary<string, string>
                 break;
         }
         return buttonMapStrings;
+    }
+    public static Dictionary<string, string> GetAxisForPlatform(RuntimePlatform runtimePlatform)
+    {
+        Dictionary<string, string> axisMapStrings;
+        switch (runtimePlatform)
+        {
+            case RuntimePlatform.OSXPlayer:
+                axisMapStrings = JoyPlatformMaps.XboxMacAxes;
+                break;
+            case RuntimePlatform.WindowsPlayer:
+                axisMapStrings = JoyPlatformMaps.XboxWindowsAxes;
+                break;
+            case RuntimePlatform.LinuxPlayer:
+                axisMapStrings = JoyPlatformMaps.XboxLinuxAxes;
+                break;
+            case RuntimePlatform.WebGLPlayer:
+                axisMapStrings = JoyPlatformMaps.GenericAxes;
+                break;
+            case RuntimePlatform.PS4:
+                // TODO add custom PS4 Support
+                axisMapStrings = JoyPlatformMaps.GenericAxes;
+                break;
+            case RuntimePlatform.XboxOne:
+                // TODO add custom Xbox Support
+                axisMapStrings = JoyPlatformMaps.GenericAxes;
+                break;
+            case RuntimePlatform.Switch:
+                // TODO add custom Switch Support
+                axisMapStrings = JoyPlatformMaps.GenericAxes;
+                break;
+            default:
+                axisMapStrings = JoyPlatformMaps.GenericAxes;
+                break;
+        }
+        return axisMapStrings;
     }
 }
