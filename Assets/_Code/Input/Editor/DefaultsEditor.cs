@@ -10,9 +10,7 @@ using System.Reflection;
 public class DefaultsEditor : Editor {
 
     private List<Type> inputControllerClasses;
-    /// <summary>
-    /// TODO Move this function in to editor script where class selection goes.
-    /// </summary>
+
     private List<Type> ICCS
     {
         get
@@ -30,25 +28,29 @@ public class DefaultsEditor : Editor {
     public void OnEnable()
     {
         InputControllerDefault inputControllerDefault = (InputControllerDefault)target;
-        if(inputControllerDefault.inputControllerType == null || !ICCS.Contains(inputControllerDefault.inputControllerType))
+        if(inputControllerDefault.InputControllerType == null)
         {
-            inputControllerDefault.inputControllerType = ICCS[0];
+            inputControllerDefault.InputControllerType = ICCS[0];
             switch (Application.platform)
             {
                 case RuntimePlatform.WindowsEditor:
-                    inputControllerDefault.PlatformInputs = new Dictionary<RuntimePlatform, InputController>() { { RuntimePlatform.WindowsPlayer, (InputController)CreateInstance(ICCS[0]) } };
+                    inputControllerDefault.runtimePlatform = RuntimePlatform.WindowsPlayer;
+                    inputControllerDefault.inputController = (InputController)Activator.CreateInstance(ICCS[0]);
                     break;
                 case RuntimePlatform.LinuxEditor:
-                    inputControllerDefault.PlatformInputs = new Dictionary<RuntimePlatform, InputController>() { { RuntimePlatform.LinuxPlayer, (InputController)CreateInstance(ICCS[0]) } };
+                    inputControllerDefault.runtimePlatform = RuntimePlatform.LinuxPlayer;
+                    inputControllerDefault.inputController = (InputController)Activator.CreateInstance(ICCS[0]);
                     break;
                 case RuntimePlatform.OSXEditor:
-                    inputControllerDefault.PlatformInputs = new Dictionary<RuntimePlatform, InputController>() { { RuntimePlatform.OSXPlayer, (InputController)CreateInstance(ICCS[0]) } };
+                    inputControllerDefault.runtimePlatform = RuntimePlatform.OSXPlayer;
+                    inputControllerDefault.inputController = (InputController)Activator.CreateInstance(ICCS[0]);
                     break;
                 default:
-                    inputControllerDefault.PlatformInputs = new Dictionary<RuntimePlatform, InputController>() { { RuntimePlatform.WindowsPlayer, (InputController)CreateInstance(ICCS[0]) } };
+                    inputControllerDefault.runtimePlatform = RuntimePlatform.WindowsPlayer;
+                    inputControllerDefault.inputController = (InputController)Activator.CreateInstance(ICCS[0]);
                     break;
             }
-            inputControllerDefault.PlatformInputs.Values.ToArray()[0].InitializeControls();
+            inputControllerDefault.inputController.InitializeControls();
         }
     }
 
@@ -56,18 +58,14 @@ public class DefaultsEditor : Editor {
     {
         InputControllerDefault targ = (InputControllerDefault)target;
         EditorGUI.BeginChangeCheck();
-        EditorGUILayout.LabelField("Controller Class", EditorStyles.boldLabel);
-        Type controllerSelection = ICCS[EditorGUILayout.Popup(ICCS.IndexOf(targ.inputControllerType), ICCS.Select(x => x.Name).ToArray())];
+        Type controllerSelection = ICCS[EditorGUILayout.Popup("Controller Class",ICCS.IndexOf(targ.InputControllerType), ICCS.Select(x => x.Name).ToArray())];
         if (EditorGUI.EndChangeCheck())
         {
             Undo.RecordObject(targ, "Changed Controller Selection");
-            targ.inputControllerType = controllerSelection;
+            targ.InputControllerType = controllerSelection;
             EditorUtility.SetDirty(targ);
         }
-        for(int i = targ.PlatformInputs.Count-1; i >=0 ; i--)
-        {
-            PlatformDefaultsGUI(targ.PlatformInputs.ToArray()[i]);
-        }
+            PlatformDefaultsGUI(targ);
 
     }
     public void ClassSelectionGUI()
@@ -78,42 +76,60 @@ public class DefaultsEditor : Editor {
     {
 
     }
-    public void PlatformDefaultsGUI(KeyValuePair<RuntimePlatform, InputController> platFormDefaults)
+    public void PlatformDefaultsGUI(InputControllerDefault inputControllerDefault)
     {
-        InputControllerDefault targ = (InputControllerDefault)target;
 
         EditorGUI.BeginChangeCheck();
-        RuntimePlatform newRuntimePlatform = (RuntimePlatform) EditorGUILayout.EnumPopup(platFormDefaults.Key);
-        if (EditorGUI.EndChangeCheck() && !targ.PlatformInputs.ContainsKey(newRuntimePlatform))
+        RuntimePlatform newRuntimePlatform = (RuntimePlatform) EditorGUILayout.EnumPopup("Platform", inputControllerDefault.runtimePlatform);
+        if (EditorGUI.EndChangeCheck() && inputControllerDefault.runtimePlatform != newRuntimePlatform)
         {
             Undo.RecordObject(target, "Changed Input Platform");
-            targ.PlatformInputs.Remove(platFormDefaults.Key);
-            targ.PlatformInputs.Add(newRuntimePlatform, (InputController)CreateInstance(targ.inputControllerType));
+            inputControllerDefault.runtimePlatform = newRuntimePlatform;
+            inputControllerDefault.inputController = (InputController)Activator.CreateInstance(inputControllerDefault.InputControllerType);
         }
         EditorGUILayout.LabelField("Buttons", EditorStyles.miniBoldLabel);
-        for(int i = 0; i < platFormDefaults.Value.ButtonMaps.Length; i++)
+        for(int i = 0; i < inputControllerDefault.inputController.ButtonMaps.Length; i++)
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(platFormDefaults.Value.ButtonMaps[i].Name, GUILayout.MinWidth(144));
-            ButtonMapsGUI(platFormDefaults.Value.ButtonMaps[i], newRuntimePlatform);
+            EditorGUILayout.LabelField(inputControllerDefault.inputController.ButtonMaps[i].Name, GUILayout.MinWidth(144));
+            ButtonMapsGUI(inputControllerDefault.inputController.ButtonMaps[i], newRuntimePlatform);
             EditorGUILayout.EndHorizontal();
         }
-        for (int i = 0; i < platFormDefaults.Value.AxisMaps.Length; i++)
+        for (int i = 0; i < inputControllerDefault.inputController.AxisMaps.Length; i++)
         {
-            EditorGUILayout.LabelField(platFormDefaults.Value.AxisMaps[i].Name, GUILayout.MinWidth(144));
-            AxisMapsGUI(platFormDefaults.Value.AxisMaps[i], newRuntimePlatform);
+            EditorGUILayout.LabelField(inputControllerDefault.inputController.AxisMaps[i].Name, GUILayout.MinWidth(144));
+            AxisMapsGUI(inputControllerDefault.inputController.AxisMaps[i], newRuntimePlatform);
         }
+        for (int i = 0; i < inputControllerDefault.inputController.DualAxisMaps.Length; i++)
+        {
+            EditorGUILayout.LabelField(inputControllerDefault.inputController.DualAxisMaps[i].Name, GUILayout.MinWidth(144));
+            DualAxisMapsGUI(inputControllerDefault.inputController.DualAxisMaps[i], newRuntimePlatform);
+        }
+    }
+
+    private void DualAxisMapsGUI(DualAxisMap dualAxisMap, RuntimePlatform newRuntimePlatform)
+    {
+        int baseIndentLevel = EditorGUI.indentLevel;
+        EditorGUI.indentLevel = baseIndentLevel + 1;
+        EditorGUILayout.LabelField("Horizontal", GUILayout.MinWidth(144));
+        AxisMapsGUI(dualAxisMap.xAxisMap, newRuntimePlatform);
+        EditorGUILayout.LabelField("Vertical", GUILayout.MinWidth(144));
+        AxisMapsGUI(dualAxisMap.yAxisMap, newRuntimePlatform);
+        EditorGUI.indentLevel = baseIndentLevel;
     }
 
     private void AxisMapsGUI(AxisMap axisMap, RuntimePlatform newRuntimePlatform)
     {
         int baseIndentLevel = EditorGUI.indentLevel;
-
-        if(GUILayout.Button(axisMap.IsVirtual?"Switch To Real Axis":"Switch to Virtual Axis"))
+        EditorGUI.indentLevel = baseIndentLevel + 1;
+        EditorGUI.BeginChangeCheck();
+        EditorGUIUtility.labelWidth = EditorGUIUtility.currentViewWidth/3;
+        bool changeToVirtual = EditorGUILayout.Popup("Axis Type", axisMap.IsVirtual ? 1 : 0, new string[] { "Direct", "Virtual" })==1;
+        if (EditorGUI.EndChangeCheck())
         {
-            Undo.RecordObject(target, ((axisMap.IsVirtual ? "Changed to Real Axis for": "Changed to Virtual Axis") + axisMap.Name));
+            Undo.RecordObject(target, ((axisMap.IsVirtual ? "Changed to Real Axis for" : "Changed to Virtual Axis") + axisMap.Name));
             AxisMapData axisMapData = axisMap.AxisMapData;
-            axisMapData.isVirtual = !axisMapData.isVirtual;
+            axisMapData.isVirtual = changeToVirtual;
             axisMapData.negativeAxisName = axisMapData.isVirtual ? "0" : "";
             axisMapData.positiveAxisName = axisMapData.isVirtual ? "3" : "0";
             typeof(AxisMap).GetField("axisMapData", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).SetValue(axisMap, axisMapData);
@@ -137,24 +153,16 @@ public class DefaultsEditor : Editor {
         Dictionary<string, string> joyAxes = axisMap.IsVirtual? JoyPlatformMaps.GetButtonsForPlatform(newRuntimePlatform): JoyPlatformMaps.GetAxisForPlatform(newRuntimePlatform);
         joyAxes.Add("", "Not Active");
         string[] joyAxisArrayNames = joyAxes.Select(x => x.Key + "  |  " + x.Value).OrderBy(x => x).ToArray();
-
-        EditorGUILayout.BeginHorizontal();
         EditorGUI.indentLevel = baseIndentLevel+ 1;
-        EditorGUILayout.LabelField("Negative Axis");
         EditorGUI.BeginChangeCheck();
-        int newBut = EditorGUILayout.Popup(joyAxes.Keys.OrderBy(x => x).ToList().IndexOf(axisMap.AxisMapData.negativeAxisName), (joyAxisArrayNames).ToArray());
-        EditorGUILayout.EndHorizontal();
+        int newBut = EditorGUILayout.Popup("Negative Axis", joyAxes.Keys.OrderBy(x => x).ToList().IndexOf(axisMap.AxisMapData.negativeAxisName), (joyAxisArrayNames).ToArray());
         EditorGUI.indentLevel = baseIndentLevel + 2;
-        EditorGUILayout.BeginHorizontal();
         if (axisMap.NegativeAxisName == "" || axisMap.AxisMapData.isVirtual) { GUI.enabled = false; }
-        EditorGUILayout.LabelField("Is Inverted");
-        GUILayout.FlexibleSpace();
-        bool isNegativeAxisInverted = EditorGUILayout.Toggle(axisMap.AxisMapData.isNegativeAxisInverted);
-        EditorGUILayout.EndHorizontal();
-        GUI.enabled = true;
+        bool isNegativeAxisInverted = EditorGUILayout.Toggle("Is Inverted", axisMap.AxisMapData.isNegativeAxisInverted);
+        GUI.enabled = true; 
         if (EditorGUI.EndChangeCheck())
         {
-            Undo.RecordObject(target, ("Changed mapping of " + axisMap.Name));
+            Undo.RegisterCompleteObjectUndo(target, ("Changed mapping of " + axisMap.Name));
             string val = joyAxes.Keys.ToArray().OrderBy(x => x).ToArray()[newBut];
             AxisMapData axisMapData = axisMap.AxisMapData;
             axisMapData.negativeAxisName = val;
@@ -165,25 +173,19 @@ public class DefaultsEditor : Editor {
 
         joyAxes.Remove("");
         joyAxisArrayNames = joyAxes.Select(x => x.Key + "  |  " + x.Value).OrderBy(x => x).ToArray();
-
-
-        EditorGUILayout.BeginHorizontal();
+        
         EditorGUI.indentLevel = baseIndentLevel+1;
-        EditorGUILayout.LabelField("Positive Axis");
         EditorGUI.BeginChangeCheck();
-        newBut = EditorGUILayout.Popup(joyAxes.Keys.OrderBy(x => x).ToList().IndexOf(axisMap.AxisMapData.positiveAxisName), joyAxisArrayNames);
-        EditorGUILayout.EndHorizontal();
+        newBut = EditorGUILayout.Popup("Positive Axis", joyAxes.Keys.OrderBy(x => x).ToList().IndexOf(axisMap.AxisMapData.positiveAxisName), joyAxisArrayNames);
         EditorGUILayout.BeginHorizontal();
         EditorGUI.indentLevel = baseIndentLevel + 2;
         GUI.enabled = !axisMap.AxisMapData.isVirtual;
-        EditorGUILayout.LabelField("Is Inverted");
-        GUILayout.FlexibleSpace();
-        bool isPostiveAxisInverted = EditorGUILayout.Toggle((axisMap.AxisMapData.negativeAxisName == "" && !axisMap.AxisMapData.isVirtual ? axisMap.AxisMapData.isInverted:axisMap.AxisMapData.isPositiveAxisInverted), GUILayout.ExpandWidth(true));
+        bool isPostiveAxisInverted = EditorGUILayout.Toggle("Is Inverted", (axisMap.AxisMapData.negativeAxisName == "" && !axisMap.AxisMapData.isVirtual ? axisMap.AxisMapData.isInverted:axisMap.AxisMapData.isPositiveAxisInverted), GUILayout.ExpandWidth(true));
         EditorGUILayout.EndHorizontal();
         GUI.enabled = true;
         if (EditorGUI.EndChangeCheck())
         {
-            Undo.RecordObject(target, ("Changed mapping of " + axisMap.Name));
+            Undo.RegisterCompleteObjectUndo(target, ("Changed mapping of " + axisMap.Name));
             string val = joyAxes.Keys.ToArray().OrderBy(x => x).ToArray()[newBut];
             AxisMapData axisMapData = axisMap.AxisMapData;
             axisMapData.positiveAxisName = val;

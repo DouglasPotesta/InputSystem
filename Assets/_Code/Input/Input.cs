@@ -5,8 +5,9 @@ using UnityEngine;
 using System;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Reflection;
 using UInput = UnityEngine.Input;
+using System.Security.Cryptography.X509Certificates;
+using UnityEditor;
 //TODO move defaults into an editor script of some kind to allow setting specific defaults
 //TODO make InputController an inheritable class that can be used for creating custom controllers
 // these maps need to be publicly editable in the editor. Also there needs to be a set class option to specify which inputcontroller should be used.
@@ -21,6 +22,31 @@ public partial class Input : MonoBehaviour
 
     private static InputController[] num;
 
+    [SerializeField]
+    private InputControllerDefault[] PlatformDefaults;
+
+    public InputControllerDefault InputControllerDefaults
+    {
+        get { if(inputControllerDefaults == null)
+            {
+
+                InputControllerDefault[] inputControllerDefaultsFound = Resources.FindObjectsOfTypeAll<InputControllerDefault>();
+                if(inputControllerDefaultsFound.Length == 0)
+                {
+                    Debug.LogError("No Defaults found for InputController.");
+                    return null;
+                }
+                else
+                {
+                    inputControllerDefaults = inputControllerDefaultsFound[0];
+                }
+            }
+            return inputControllerDefaults;
+        }
+    }
+    private InputControllerDefault inputControllerDefaults;
+
+    private static Dictionary<Type, InputController[]> typeToControllers=new Dictionary<Type, InputController[]>();
     public static InputController[] Num
     {
         get
@@ -282,11 +308,35 @@ public partial class Input : MonoBehaviour
         bf.Serialize(file, data);
         file.Close();
     }
+#if UNITY_EDITOR
+    [UnityEditor.InitializeOnLoadMethod]
+    static void ConfigureEditorForInput()
+    {
+        UnityEditor.EditorBuildSettingsScene[] sceneSetups = UnityEditor.EditorBuildSettings.scenes;
+        if (!sceneSetups.Any(x => x.path.Contains("InputLoader.unity")))
+        {
+            string path = AssetDatabase.FindAssets("InputLoader").Where(x=>AssetDatabase.GUIDToAssetPath(x).Contains("/InputLoader.unity")).First();
+            path = AssetDatabase.GUIDToAssetPath(path);
+            EditorBuildSettings.scenes = EditorBuildSettings.scenes.Concat(new EditorBuildSettingsScene[] { new EditorBuildSettingsScene(path, true) }).ToArray();
+            Debug.Log("Added InputLoader scene to build settings.");
+        }
 
+    }
+#endif
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void LoadSettings()
     {
-        if(singleton == null) { singleton = new GameObject("Input").AddComponent<Input>(); singleton.gameObject.hideFlags = HideFlags.HideAndDontSave; }
+        if(singleton == null)
+        {
+
+            UnityEngine.SceneManagement.SceneManager.LoadScene("InputLoader", UnityEngine.SceneManagement.LoadSceneMode.Additive);
+            singleton = FindObjectOfType<Input>();
+            if (singleton == null)
+            {
+                Debug.LogWarning("Failed to initialize input properly.");
+                singleton = new GameObject("Input").AddComponent<Input>(); singleton.gameObject.hideFlags = HideFlags.HideAndDontSave;
+            }
+        }
         if (File.Exists(SavePath))
         {
 
@@ -350,7 +400,7 @@ public struct DualAxisMapData
 public enum ControllerStatus { Disconnected, Connected }
 
 [System.Serializable]
-public class InputMap
+public class InputMap 
 {
     protected InputController controller;
     public static bool IsTestingForInput { get; protected set; }
@@ -373,7 +423,9 @@ public class ButtonMap : InputMap
 {
     public override string Name { get { return buttonMapData.name; } }
     public string ButtonMapName { get { return buttonMapData.buttonMapName; } }
+    
     public ButtonMapData ButtonMapData { get { return buttonMapData; } }
+    [SerializeField]
     private ButtonMapData buttonMapData;
 
     private string ButtonString = "";
@@ -566,6 +618,7 @@ public class AxisMap : InputMap
     private float NegativeDir { get { return axisMapData.isNegativeAxisInverted? -1 : 1; } }
     public int Sensitivity { get { return axisMapData.sensitivity; } set { axisMapData.sensitivity = value; } }
     public AxisMapData AxisMapData { get { return axisMapData; } }
+    [SerializeField]
     private AxisMapData axisMapData;
 
     private float serialValue = 0;
@@ -766,6 +819,7 @@ public class DualAxisMap:InputMap
     public AxisMap xAxisMap;
     public AxisMap yAxisMap;
     public DualAxisMapData DualAxisMapData { get { return dualAxisMapData; } }
+    [SerializeField]
     private DualAxisMapData dualAxisMapData;
 
     private Vector2 serialValue = new Vector2();

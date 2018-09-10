@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf7e02c784294b547b4d667bb794bcf6, type: 3}
+  m_Name: New Input Controller Default
+  m_EditorClassIdentifier: 
+  inputControllerTypeName: BasicInput
+  inputController:
+    serials: '{"serials":"","derivedClassName":"BasicInput","controllerStatus":0,"gamepad":true,"Start":{"buttonMapData":{"name":"Start","buttonMapName":"0"}},"AltStart":{"buttonMapData":{"name":"AltStart","buttonMapName":"6"}},"Confirm":{"buttonMapData":{"name":"Confirm","buttonMapName":"0"}},"Back":{"buttonMapData":{"name":"Back","buttonMapName":"1"}},"Jump":{"buttonMapData":{"name":"Jump","buttonMapName":"0"}},"Reload":{"buttonMapData":{"name":"Reload","buttonMapName":"0"}},"SwapPrimary":{"buttonMapData":{"name":"SwapPrimary","buttonMapName":"0"}},"SwapSecondary":{"buttonMapData":{"name":"SwapSecondary","buttonMapName":"0"}},"Crouch":{"buttonMapData":{"name":"Crouch","buttonMapName":"9"}},"Zoom":{"buttonMapData":{"name":"Zoom","buttonMapName":"0"}},"UsePrimary":{"axisMapData":{"name":"UsePrimary","isInverted":false,"isVirtual":false,"is0To1Axis":false,"positiveAxisName":"0","isPositiveAxisInverted":false,"negativeAxisName":"","isNegativeAxisInverted":false,"sensitivity":1}},"UseSecondary":{"axisMapData":{"name":"UseSecondary","isInverted":false,"isVirtual":false,"is0To1Axis":false,"positiveAxisName":"0","isPositiveAxisInverted":false,"negativeAxisName":"","isNegativeAxisInverted":false,"sensitivity":1}},"Movement":{"xAxisMap":{"axisMapData":{"name":"X-Axis","isInverted":false,"isVirtual":false,"is0To1Axis":false,"positiveAxisName":"0","isPositiveAxisInverted":false,"negativeAxisName":"","isNegativeAxisInverted":false,"sensitivity":1}},"yAxisMap":{"axisMapData":{"name":"Y-Axis","isInverted":false,"isVirtual":false,"is0To1Axis":false,"positiveAxisName":"1","isPositiveAxisInverted":false,"negativeAxisName":"","isNegativeAxisInverted":false,"sensitivity":1}},"dualAxisMapData":{"name":"Movement","xAxisMapData":{"name":"X-Axis","isInverted":false,"isVirtual":false,"is0To1Axis":false,"positiveAxisName":"0","isPositiveAxisInverted":false,"negativeAxisName":"","isNegativeAxisInverted":false,"sensitivity":0},"yAxisMapData":{"name":"Y-Axis","isInverted":false,"isVirtual":false,"is0To1Axis":false,"positiveAxisName":"1","isPositiveAxisInverted":false,"negativeAxisName":"","isNegativeAxisInverted":false,"sensitivity":0}}},"Look":{"xAxisMap":{"axisMapData":{"name":"X-Axis","isInverted":false,"isVirtual":false,"is0To1Axis":false,"positiveAxisName":"0","isPositiveAxisInverted":false,"negativeAxisName":"","isNegativeAxisInverted":false,"sensitivity":1}},"yAxisMap":{"axisMapData":{"name":"Y-Axis","isInverted":false,"isVirtual":false,"is0To1Axis":false,"positiveAxisName":"1","isPositiveAxisInverted":false,"negativeAxisName":"","isNegativeAxisInverted":false,"sensitivity":1}},"dualAxisMapData":{"name":"Look","xAxisMapData":{"name":"X-Axis","isInverted":false,"isVirtual":false,"is0To1Axis":false,"positiveAxisName":"0","isPositiveAxisInverted":false,"negativeAxisName":"","isNegativeAxisInverted":false,"sensitivity":0},"yAxisMapData":{"name":"Y-Axis","isInverted":false,"isVirtual":false,"is0To1Axis":false,"positiveAxisName":"1","isPositiveAxisInverted":false,"negativeAxisName":"","isNegativeAxisInverted":false,"sensitivity":0}}}}'
+    derivedClassName: BasicInput
+    controllerStatus: 0
+    gamepad: 1
+  runtimePlatform: 2
