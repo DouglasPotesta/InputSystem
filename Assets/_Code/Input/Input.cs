@@ -6,12 +6,11 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UInput = UnityEngine.Input;
-using System.Security.Cryptography.X509Certificates;
 using UnityEditor;
 //TODO move defaults into an editor script of some kind to allow setting specific defaults
 //TODO make InputController an inheritable class that can be used for creating custom controllers
 // these maps need to be publicly editable in the editor. Also there needs to be a set class option to specify which inputcontroller should be used.
-public partial class Input : MonoBehaviour
+public partial class Input 
 {
     static readonly string[] axesNames = new string[] { "mouse_axis_0", "mouse_axis_1", "mouse_axis_2", "joy_0_axis_0", "joy_0_axis_1", "joy_0_axis_2", "joy_0_axis_3", "joy_0_axis_4", "joy_0_axis_5", "joy_0_axis_6", "joy_0_axis_7", "joy_0_axis_8", "joy_0_axis_9", "joy_0_axis_10", "joy_0_axis_11", "joy_0_axis_12", "joy_0_axis_13", "joy_0_axis_14", "joy_0_axis_15", "joy_0_axis_16", "joy_0_axis_17", "joy_0_axis_18", "joy_0_axis_19", "joy_0_axis_20", "joy_0_axis_21", "joy_0_axis_22", "joy_0_axis_23", "joy_0_axis_24", "joy_0_axis_25", "joy_0_axis_26", "joy_0_axis_27", "joy_1_axis_0", "joy_1_axis_1", "joy_1_axis_2", "joy_1_axis_3", "joy_1_axis_4", "joy_1_axis_5", "joy_1_axis_6", "joy_1_axis_7", "joy_1_axis_8", "joy_1_axis_9", "joy_1_axis_10", "joy_1_axis_11", "joy_1_axis_12", "joy_1_axis_13", "joy_1_axis_14", "joy_1_axis_15", "joy_1_axis_16", "joy_1_axis_17", "joy_1_axis_18", "joy_1_axis_19", "joy_1_axis_20", "joy_1_axis_21", "joy_1_axis_22", "joy_1_axis_23", "joy_1_axis_24", "joy_1_axis_25", "joy_1_axis_26", "joy_1_axis_27", "joy_2_axis_0", "joy_2_axis_1", "joy_2_axis_2", "joy_2_axis_3", "joy_2_axis_4", "joy_2_axis_5", "joy_2_axis_6", "joy_2_axis_7", "joy_2_axis_8", "joy_2_axis_9", "joy_2_axis_10", "joy_2_axis_11", "joy_2_axis_12", "joy_2_axis_13", "joy_2_axis_14", "joy_2_axis_15", "joy_2_axis_16", "joy_2_axis_17", "joy_2_axis_18", "joy_2_axis_19", "joy_2_axis_20", "joy_2_axis_21", "joy_2_axis_22", "joy_2_axis_23", "joy_2_axis_24", "joy_2_axis_25", "joy_2_axis_26", "joy_2_axis_27", "joy_3_axis_0", "joy_3_axis_1", "joy_3_axis_2", "joy_3_axis_3", "joy_3_axis_4", "joy_3_axis_5", "joy_3_axis_6", "joy_3_axis_7", "joy_3_axis_8", "joy_3_axis_9", "joy_3_axis_10", "joy_3_axis_11", "joy_3_axis_12", "joy_3_axis_13", "joy_3_axis_14", "joy_3_axis_15", "joy_3_axis_16", "joy_3_axis_17", "joy_3_axis_18", "joy_3_axis_19", "joy_3_axis_20", "joy_3_axis_21", "joy_3_axis_22", "joy_3_axis_23", "joy_3_axis_24", "joy_3_axis_25", "joy_3_axis_26", "joy_3_axis_27", "joy_4_axis_0", "joy_4_axis_1", "joy_4_axis_2", "joy_4_axis_3", "joy_4_axis_4", "joy_4_axis_5", "joy_4_axis_6", "joy_4_axis_7", "joy_4_axis_8", "joy_4_axis_9", "joy_4_axis_10", "joy_4_axis_11", "joy_4_axis_12", "joy_4_axis_13", "joy_4_axis_14", "joy_4_axis_15", "joy_4_axis_16", "joy_4_axis_17", "joy_4_axis_18", "joy_4_axis_19", "joy_4_axis_20", "joy_4_axis_21", "joy_4_axis_22", "joy_4_axis_23", "joy_4_axis_24", "joy_4_axis_25", "joy_4_axis_26", "joy_4_axis_27", "joy_5_axis_0", "joy_5_axis_1", "joy_5_axis_2", "joy_5_axis_3", "joy_5_axis_4", "joy_5_axis_5", "joy_5_axis_6", "joy_5_axis_7", "joy_5_axis_8", "joy_5_axis_9", "joy_5_axis_10", "joy_5_axis_11", "joy_5_axis_12", "joy_5_axis_13", "joy_5_axis_14", "joy_5_axis_15", "joy_5_axis_16", "joy_5_axis_17", "joy_5_axis_18", "joy_5_axis_19", "joy_5_axis_20", "joy_5_axis_21", "joy_5_axis_22", "joy_5_axis_23", "joy_5_axis_24", "joy_5_axis_25", "joy_5_axis_26", "joy_5_axis_27", "joy_6_axis_0", "joy_6_axis_1", "joy_6_axis_2", "joy_6_axis_3", "joy_6_axis_4", "joy_6_axis_5", "joy_6_axis_6", "joy_6_axis_7", "joy_6_axis_8", "joy_6_axis_9", "joy_6_axis_10", "joy_6_axis_11", "joy_6_axis_12", "joy_6_axis_13", "joy_6_axis_14", "joy_6_axis_15", "joy_6_axis_16", "joy_6_axis_17", "joy_6_axis_18", "joy_6_axis_19", "joy_6_axis_20", "joy_6_axis_21", "joy_6_axis_22", "joy_6_axis_23", "joy_6_axis_24", "joy_6_axis_25", "joy_6_axis_26", "joy_6_axis_27", "joy_7_axis_0", "joy_7_axis_1", "joy_7_axis_2", "joy_7_axis_3", "joy_7_axis_4", "joy_7_axis_5", "joy_7_axis_6", "joy_7_axis_7", "joy_7_axis_8", "joy_7_axis_9", "joy_7_axis_10", "joy_7_axis_11", "joy_7_axis_12", "joy_7_axis_13", "joy_7_axis_14", "joy_7_axis_15", "joy_7_axis_16", "joy_7_axis_17", "joy_7_axis_18", "joy_7_axis_19", "joy_7_axis_20", "joy_7_axis_21", "joy_7_axis_22", "joy_7_axis_23", "joy_7_axis_24", "joy_7_axis_25", "joy_7_axis_26", "joy_7_axis_27", "joy_8_axis_0", "joy_8_axis_1", "joy_8_axis_2", "joy_8_axis_3", "joy_8_axis_4", "joy_8_axis_5", "joy_8_axis_6", "joy_8_axis_7", "joy_8_axis_8", "joy_8_axis_9", "joy_8_axis_10", "joy_8_axis_11", "joy_8_axis_12", "joy_8_axis_13", "joy_8_axis_14", "joy_8_axis_15", "joy_8_axis_16", "joy_8_axis_17", "joy_8_axis_18", "joy_8_axis_19", "joy_8_axis_20", "joy_8_axis_21", "joy_8_axis_22", "joy_8_axis_23", "joy_8_axis_24", "joy_8_axis_25", "joy_8_axis_26", "joy_8_axis_27", "joy_9_axis_0", "joy_9_axis_1", "joy_9_axis_2", "joy_9_axis_3", "joy_9_axis_4", "joy_9_axis_5", "joy_9_axis_6", "joy_9_axis_7", "joy_9_axis_8", "joy_9_axis_9", "joy_9_axis_10", "joy_9_axis_11", "joy_9_axis_12", "joy_9_axis_13", "joy_9_axis_14", "joy_9_axis_15", "joy_9_axis_16", "joy_9_axis_17", "joy_9_axis_18", "joy_9_axis_19", "joy_9_axis_20", "joy_9_axis_21", "joy_9_axis_22", "joy_9_axis_23", "joy_9_axis_24", "joy_9_axis_25", "joy_9_axis_26", "joy_9_axis_27", "joy_10_axis_0", "joy_10_axis_1", "joy_10_axis_2", "joy_10_axis_3", "joy_10_axis_4", "joy_10_axis_5", "joy_10_axis_6", "joy_10_axis_7", "joy_10_axis_8", "joy_10_axis_9", "joy_10_axis_10", "joy_10_axis_11", "joy_10_axis_12", "joy_10_axis_13", "joy_10_axis_14", "joy_10_axis_15", "joy_10_axis_16", "joy_10_axis_17", "joy_10_axis_18", "joy_10_axis_19", "joy_10_axis_20", "joy_10_axis_21", "joy_10_axis_22", "joy_10_axis_23", "joy_10_axis_24", "joy_10_axis_25", "joy_10_axis_26", "joy_10_axis_27" };
     public static int JoystickCount { get { return UInput.GetJoystickNames().Where(x => (x != null && x != "")).Count(); } }
@@ -23,28 +22,24 @@ public partial class Input : MonoBehaviour
     private static InputController[] num;
 
     [SerializeField]
-    private InputControllerDefault[] PlatformDefaults;
+    private static InputControllerDefault[] PlatformDefaults;
 
-    public InputControllerDefault InputControllerDefaults
+    public static InputControllerDefault platformDefaultInput
     {
-        get { if(inputControllerDefaults == null)
+        get { if(inputControllerDefault == null)
             {
 
-                InputControllerDefault[] inputControllerDefaultsFound = Resources.FindObjectsOfTypeAll<InputControllerDefault>();
-                if(inputControllerDefaultsFound.Length == 0)
+                InputControllerDefault inputControllerDefaults = GameInitializer.GetAssets<InputControllerDefault>().FirstOrDefault(x => x.runtimePlatform == Application.platform);
+                if(inputControllerDefaults == null)
                 {
-                    Debug.LogError("No Defaults found for InputController.");
+                    Debug.LogError("No input controller defaults found for this platform.");
                     return null;
                 }
-                else
-                {
-                    inputControllerDefaults = inputControllerDefaultsFound[0];
-                }
             }
-            return inputControllerDefaults;
+            return inputControllerDefault;
         }
     }
-    private InputControllerDefault inputControllerDefaults;
+    private static InputControllerDefault inputControllerDefault;
 
     private static Dictionary<Type, InputController[]> typeToControllers=new Dictionary<Type, InputController[]>();
     public static InputController[] Num
@@ -71,18 +66,6 @@ public partial class Input : MonoBehaviour
 
     private const string INVALID_CONTROLLER = "Wireless Controller";
 
-    private static Input singleton;
-
-    private void Start()
-    {
-        DontDestroyOnLoad(gameObject);
-        if(Num.Length < 4) { LoadSettings(); }
-        for(int i = 0; i < Num.Length; i++)
-        {
-            Num[i].controllerStatus = CheckStatus(Num[i]);
-        }
-    }
-
     private static ControllerStatus CheckIfControllerIsConnected(int i)
     {
         return GetJoystickNames().Length > i ? !string.IsNullOrEmpty(GetJoystickNames()[i]) && (GetJoystickNames()[i] !=INVALID_CONTROLLER) ? ControllerStatus.Connected : ControllerStatus.Disconnected : ControllerStatus.Disconnected;
@@ -97,9 +80,9 @@ public partial class Input : MonoBehaviour
         return CheckIfControllerIsConnected(inputController.ControllerNumber);
     }
 
-    int joyLength = 0;
+    static int joyLength = 0;
 
-    private void Update()
+    private static void Update()
     {
         string[] currentJoyNames = Input.GetJoystickNames();
         if (joyLength != currentJoyNames.Length)
@@ -118,7 +101,7 @@ public partial class Input : MonoBehaviour
         }
     }
 
-    private void UpdateJoyConfiguration(string[] currentJoyNames)
+    private static void UpdateJoyConfiguration(string[] currentJoyNames)
     {
         joyLength = currentJoyNames.Length;
         for (int i = 0; i < 4; i++)
@@ -323,23 +306,12 @@ public partial class Input : MonoBehaviour
 
     }
 #endif
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void LoadSettings()
+    [RunOnGameInitialized]
+    public static void LoadSettings()
     {
-        if(singleton == null)
-        {
-
-            UnityEngine.SceneManagement.SceneManager.LoadScene("InputLoader", UnityEngine.SceneManagement.LoadSceneMode.Additive);
-            singleton = FindObjectOfType<Input>();
-            if (singleton == null)
-            {
-                Debug.LogWarning("Failed to initialize input properly.");
-                singleton = new GameObject("Input").AddComponent<Input>(); singleton.gameObject.hideFlags = HideFlags.HideAndDontSave;
-            }
-        }
+        GameInitializer.OnUpdate += Update;
         if (File.Exists(SavePath))
         {
-
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file;
             file = File.Open(SavePath, FileMode.Open);
@@ -360,6 +332,10 @@ public partial class Input : MonoBehaviour
             num = InputController.DefaultInputControllers();
         }
         SaveSettings();
+        for (int i = 0; i < Num.Length; i++)
+        {
+            Num[i].controllerStatus = CheckStatus(Num[i]);
+        }
     }
 
     public static void ResetAllSettings()
