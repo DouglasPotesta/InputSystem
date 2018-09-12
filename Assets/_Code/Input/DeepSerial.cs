@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using UnityEngine;
 [System.Serializable]
 public class DeepSerial : ISerializationCallbackReceiver
 {
-
-
-     [SerializeField] private string serials;
-
-    private readonly Type thisClassesType = typeof(DeepSerial);
-
+    [SerializeField] private string serials;
     [SerializeField] private string derivedClassName = "";
-
     private Type derivedClassType { get { if (derivedClassName == "") { derivedClassName = GetType().Name; }return Type.GetType(derivedClassName); } set { if(value == null) { derivedClassName = ""; } else { derivedClassName = value.Name; } } }
-
+    private bool isDeserializing = false;
+    private bool isSerializing = false;
 
     private Type DerivedClassType
     {
@@ -27,11 +18,6 @@ public class DeepSerial : ISerializationCallbackReceiver
         }
     }
 
-
-
-
-
-    bool isDeserializing = false;
     public static DeepSerial DeserializeToProperType(DeepSerial deepSerial)
     {
         if(deepSerial.GetType() != deepSerial.DerivedClassType)
@@ -43,6 +29,7 @@ public class DeepSerial : ISerializationCallbackReceiver
             return deepSerial;
         }
     }
+
     public void OnAfterDeserialize()
     {
         if (!isDeserializing)
@@ -54,7 +41,7 @@ public class DeepSerial : ISerializationCallbackReceiver
             isDeserializing = false;
         }
     }
-    bool isSerializing = false;
+
     public void OnBeforeSerialize()
     {
         if (!isSerializing)

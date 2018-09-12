@@ -7,15 +7,16 @@ using System.Reflection;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
+/// <summary>
+/// This class loads managers, settings, and other elements that last the lifetime of the application.
+/// </summary>
 public class GameInitializer : MonoBehaviour {
     private static GameInitializer singleton;
     internal static System.Action OnUpdate;
-    internal static System.Action OnInitialized;
+    [SerializeField]
+    private List<UnityEngine.Object> Assets = new List<Object>();
 
-    public List<UnityEngine.Object> Assets = new List<Object>();
-
-    public static GameInitializer Singleton
+    private static GameInitializer Singleton
     {
         get
         {
@@ -35,7 +36,7 @@ public class GameInitializer : MonoBehaviour {
 
 #if UNITY_EDITOR
     [UnityEditor.InitializeOnLoadMethod]
-    static void ConfigureEditorForInitialization()
+    private static void ConfigureEditorForInitialization()
     {
         UnityEditor.EditorBuildSettingsScene[] sceneSetups = UnityEditor.EditorBuildSettings.scenes;
         if (!sceneSetups.Any(x => x.path.Contains("GameInitializationScene.unity")))
@@ -64,46 +65,10 @@ public class GameInitializer : MonoBehaviour {
                 else
                 {
                     Singleton.gameObject.hideFlags = HideFlags.HideAndDontSave;
-                    if(OnInitialized != null)
-                    {
-                        OnInitialized();
-                    }
                     RunOnGameInitializedAttribute.CallAllMethods();
                 }
             };
         }
-    }
-
-    public static T GetAsset<T>() where T : UnityEngine.Object
-    {
-        return (T) Singleton.Assets.FirstOrDefault(x => x is T);
-    }
-
-    public static T[] GetAssets<T> ()where T : UnityEngine.Object
-    {
-        return  Singleton.Assets.Where(x => x is T).Select(x=>(T)x).ToArray();
-    }
-
-    public static UnityEngine.Object GetAsset(string typeName)
-    {
-        System.Type type = System.Type.GetType(typeName);
-        return Singleton.Assets.FirstOrDefault(x => x.GetType() == type);
-    }
-
-    public static UnityEngine.Object[] GetAssets(string typeName)
-    {
-        System.Type type = System.Type.GetType(typeName);
-        return Singleton.Assets.Where(x => x.GetType() == type).ToArray();
-    }
-
-    public static T GetAssetByName<T>(string AssetName) where T : UnityEngine.Object
-    {
-        return (T)Singleton.Assets.FirstOrDefault(x => (x is T) && x.name == AssetName);
-    }
-
-    public static UnityEngine.Object GetAssetByName(string AssetName)
-    {
-        return Singleton.Assets.FirstOrDefault(x => x.name == AssetName);
     }
 
     void Start () {
@@ -111,15 +76,85 @@ public class GameInitializer : MonoBehaviour {
         UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync("GameInitializationScene");
     }
 	
-	// Update is called once per frame
 	void Update () {
 		if(OnUpdate != null)
         {
             OnUpdate();
         }
 	}
+
+    /// <summary>
+    /// Get first Initialization Asset of type T
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static T GetAsset<T>() where T : UnityEngine.Object
+    {
+        return (T)Singleton.Assets.FirstOrDefault(x => x is T);
+    }
+    /// <summary>
+    /// Get all Initialization Assets of type T
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static T[] GetAllAssets<T>() where T : UnityEngine.Object
+    {
+        return Singleton.Assets.Where(x => x is T).Select(x => (T)x).ToArray();
+    }
+    /// <summary>
+    /// Get Initialization Asset with type typeName
+    /// </summary>
+    /// <param name="typeName"></param>
+    /// <returns></returns>
+    public static UnityEngine.Object GetAsset(string typeName)
+    {
+        System.Type type = System.Type.GetType(typeName);
+        return Singleton.Assets.FirstOrDefault(x => x.GetType() == type);
+    }
+    /// <summary>
+    /// Get all Initialization Assets with type typeName
+    /// </summary>
+    /// <param name="typeName"></param>
+    /// <returns></returns>
+    public static UnityEngine.Object[] GetAllAssets(string typeName)
+    {
+        System.Type type = System.Type.GetType(typeName);
+        return Singleton.Assets.Where(x => x.GetType() == type).ToArray();
+    }
+    /// <summary>
+    /// Get first Initialization Assets of specified type with specified name.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="AssetName"></param>
+    /// <returns></returns>
+    public static T GetAssetByName<T>(string AssetName) where T : UnityEngine.Object
+    {
+        return (T)GetAllAssets<T>().FirstOrDefault(x => x.name == AssetName);
+    }
+    /// <summary>
+    /// Get first Initialization Assets of specified type with specified name.
+    /// </summary>
+    /// <param name="AssetName"></param>
+    /// <returns></returns>
+    public static UnityEngine.Object GetAssetByName(string AssetName, string typeName)
+    {
+        return GetAllAssets(typeName).FirstOrDefault(x => x.name == AssetName);
+    }
+
+    /// <summary>
+    /// Get first Initialization Assets with specified name.
+    /// </summary>
+    /// <param name="AssetName"></param>
+    /// <returns></returns>
+    public static UnityEngine.Object GetAssetByName(string AssetName)
+    {
+        return Singleton.Assets.FirstOrDefault(x => x.name == AssetName);
+    }
 }
 
+/// <summary>
+/// Used to call a paramterless static void method after Game Initialization is completed. 
+/// </summary>
 [System.AttributeUsage(System.AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
 public class RunOnGameInitializedAttribute : System.Attribute
 {
@@ -139,7 +174,7 @@ public class RunOnGameInitializedAttribute : System.Attribute
         Assembly assemblies = Assembly.GetCallingAssembly();
         List<MethodInfo> methodInfos = new List<MethodInfo>();
         System.Type[] types = assemblies.GetTypes();
-        methodInfos.AddRange(types.SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).Where(m => m.GetCustomAttributes(type, false).Length > 0)));
+        methodInfos.AddRange(types.SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static).Where(m =>m.GetParameters().Length==0 && m.GetCustomAttributes(type, false).Length > 0)));
         methodInfos.OrderBy(item => ((RunOnGameInitializedAttribute)item.GetCustomAttributes(type, true).First()).order);
 
         for (int ii = 0; ii < methodInfos.Count; ii++)
@@ -148,13 +183,6 @@ public class RunOnGameInitializedAttribute : System.Attribute
             if (paramaters.Length == 0 && methodInfos[ii].IsStatic)
             {
                 methodInfos[ii].Invoke(null, new object[] { });
-            }
-            else
-            {
-                if (paramaters.Length != 0|| !methodInfos[ii].IsStatic)
-                {
-                    Debug.LogError(methodInfos[ii] + " does not follow the proper signature. Needs to be static void method()");
-                }
             }
         }
 

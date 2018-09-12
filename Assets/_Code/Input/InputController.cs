@@ -14,7 +14,7 @@ public class InputController : DeepSerial
     [SerializeField]
     private bool gamepad = true;
     public int ControllerNumber { get { return controllerNumber; } /*TODO make this set private by moving controllerdisconnect logic in this class*/set { controllerNumber = value; } }
-    private int controllerNumber = 0;
+    private int controllerNumber = 10;
     public bool IsSerial { get { return isSerial; } private set { isSerial = value; } }
     private bool isSerial;
     [NonSerialized]
@@ -136,44 +136,6 @@ public class InputController : DeepSerial
     }
 
     /// <summary>
-    /// Switches the controllers input back to default gamepad controls.
-    /// </summary>
-    public void SwitchToGamePad()
-    {
-        if (Input.Num[0] == this)
-        {
-            RevertToDefaultControls();
-            InitializeControls();
-            if (Input.JoystickCount < 4)
-            {
-                for (int i = 3; i >= 0; i--)
-                {
-                    if (Input.Num[i].controllerStatus == ControllerStatus.Connected)
-                    {
-                        InitializeControls();
-                        controllerStatus = ControllerStatus.Connected;
-                        Input.Num[i].DisconnectController();
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Switches the controllers input back to pc controls
-    /// </summary>
-    public void SwitchToPC()
-    {
-        if (Input.Num[0] == this)
-        {
-            RevertToDefaultPCControls();
-            InitializeControls();
-            controllerStatus = ControllerStatus.Connected;
-        }
-    }
-
-    /// <summary>
     /// Disconnects a players controller.(*Note only works with Gamepads)
     /// </summary>
     public void DisconnectController()
@@ -192,6 +154,7 @@ public class InputController : DeepSerial
             ButtonMaps[i].Up();
         }
     }
+
     /// <summary>
     /// Used for freezing a controller input state when serializing and sending a controller state with an rpc.
     /// UnFreeze must be called to resume checking for input.
@@ -204,66 +167,12 @@ public class InputController : DeepSerial
         }
         IsSerial = true;
     }
+
     /// <summary>
     /// Resumes input checking and unfreezes the input state.
     /// </summary>
     public void UnFreeze()
     {
         IsSerial = false;
-    }
-    private void RevertToDefaultControls()
-    {
-        Gamepad = true;
-        ControllerNumber = 1;
-    }
-
-    private void RevertToDefaultPCControls()
-    {
-        Gamepad = false;
-        ControllerNumber = 0;
-    }
-
-    /// <summary>
-    /// Returns a default gamepad controller
-    /// </summary>
-    /// <returns></returns>
-    public static InputController Default()
-    {
-        InputController inputController = new InputController();
-        inputController.RevertToDefaultControls();
-        return inputController;
-    }
-    /// <summary>
-    /// returns a default pc controller
-    /// </summary>
-    /// <returns></returns>
-    public static InputController DefaultPC()
-    {
-        InputController inputController = new InputController();
-        inputController.RevertToDefaultPCControls();
-        return inputController;
-    }
-    /// <summary>
-    /// Returns the default settings for all controllers
-    /// </summary>
-    /// <returns></returns>
-    public static InputController[] DefaultInputControllers()
-    {
-#if UNITY_STANDALONE
-
-        InputController[] configs = (new InputController[] { InputController.DefaultPC() }).Concat(Enumerable.Repeat(InputController.Default(), 3)).ToArray();
-        for (int i = 0; i < configs.Length; i++)
-        {
-            configs[i].ControllerNumber = Mathf.Max(i - 1, 0);
-        }
-        return configs;
-#else
-        InputController[] configs = Enumerable.Repeat(InputController.Default(), 4).ToArray();
-        for(int i = 0; i < configs.Length; i++)
-        {
-            configs[i].controllerNumber = i;
-        }
-        return configs;
-#endif
     }
 }

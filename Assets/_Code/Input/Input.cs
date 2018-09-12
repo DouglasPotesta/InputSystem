@@ -21,16 +21,13 @@ public partial class Input
 
     private static InputController[] num;
 
-    [SerializeField]
-    private static InputControllerDefault[] PlatformDefaults;
-
-    public static InputControllerDefault platformDefaultInput
+    public static InputControllerDefault PlatformDefaultInput
     {
         get { if(inputControllerDefault == null)
             {
 
-                InputControllerDefault inputControllerDefaults = GameInitializer.GetAssets<InputControllerDefault>().FirstOrDefault(x => x.runtimePlatform == Application.platform);
-                if(inputControllerDefaults == null)
+                inputControllerDefault = GameInitializer.GetAllAssets<InputControllerDefault>().FirstOrDefault(x => x.runtimePlatform == Application.platform);
+                if(inputControllerDefault == null)
                 {
                     Debug.LogError("No input controller defaults found for this platform.");
                     return null;
@@ -40,8 +37,7 @@ public partial class Input
         }
     }
     private static InputControllerDefault inputControllerDefault;
-
-    private static Dictionary<Type, InputController[]> typeToControllers=new Dictionary<Type, InputController[]>();
+    
     public static InputController[] Num
     {
         get
@@ -284,7 +280,7 @@ public partial class Input
         }
         else
         {
-            data = InputController.DefaultInputControllers();
+            data = Enumerable.Repeat(PlatformDefaultInput.inputController, 4).ToArray();
         }
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Open(SavePath, FileMode.Create);
@@ -329,7 +325,7 @@ public partial class Input
         }
         else
         {
-            num = InputController.DefaultInputControllers();
+            num = Enumerable.Repeat(PlatformDefaultInput.inputController, 4).ToArray();
         }
         SaveSettings();
         for (int i = 0; i < Num.Length; i++)

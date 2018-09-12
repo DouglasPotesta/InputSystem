@@ -212,10 +212,7 @@ public class DefaultsEditor : Editor {
             typeof(ButtonMap).GetField("buttonMapData", BindingFlags.NonPublic | BindingFlags.Instance|BindingFlags.Public).SetValue(buttonMap, buttonMapData);
             EditorUtility.SetDirty(target);
         }
-
     }
-
-
 }
 
 public class JoyPlatformMaps
