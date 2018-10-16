@@ -3,10 +3,10 @@ using UnityEngine;
 using Potesta.Serialization;
 namespace Potesta.FlexInput
 {
+    [IncludeInStartUp]
     [CreateAssetMenu(menuName = "Input/Platform Defaults")]
     public class InputControllerDefault : DeepScriptableObject
     {
-
         public Type InputControllerType
         {
             get { if (string.IsNullOrEmpty(inputControllerTypeName)) { return null; } else { return Type.GetType(inputControllerTypeName); } }

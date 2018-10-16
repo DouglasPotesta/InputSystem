@@ -184,12 +184,15 @@ namespace Potesta.FlexInput
             Dictionary<string, string> buttonMapStrings;
             switch (runtimePlatform)
             {
+                case RuntimePlatform.OSXEditor:
                 case RuntimePlatform.OSXPlayer:
                     buttonMapStrings = JoyPlatformMaps.XboxMacButtons;
                     break;
+                case RuntimePlatform.WindowsEditor:
                 case RuntimePlatform.WindowsPlayer:
                     buttonMapStrings = JoyPlatformMaps.XboxWindowsButtons;
                     break;
+                case RuntimePlatform.LinuxEditor:
                 case RuntimePlatform.LinuxPlayer:
                     buttonMapStrings = JoyPlatformMaps.XboxLinuxButtons;
                     break;
@@ -219,12 +222,15 @@ namespace Potesta.FlexInput
             Dictionary<string, string> axisMapStrings;
             switch (runtimePlatform)
             {
+                case RuntimePlatform.OSXEditor:
                 case RuntimePlatform.OSXPlayer:
                     axisMapStrings = JoyPlatformMaps.XboxMacAxes;
                     break;
+                case RuntimePlatform.WindowsEditor:
                 case RuntimePlatform.WindowsPlayer:
                     axisMapStrings = JoyPlatformMaps.XboxWindowsAxes;
                     break;
+                case RuntimePlatform.LinuxEditor:
                 case RuntimePlatform.LinuxPlayer:
                     axisMapStrings = JoyPlatformMaps.XboxLinuxAxes;
                     break;

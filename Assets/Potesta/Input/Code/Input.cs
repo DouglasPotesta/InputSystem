@@ -19,7 +19,7 @@ public partial class Input
 
     public static bool IsTestingForInput { get { return InputMap.IsTestingForInput; } }
 
-    private static InputController[] num;
+
 
     public static InputControllerDefault PlatformDefaultInput
     {
@@ -37,8 +37,9 @@ public partial class Input
         }
     }
     private static InputControllerDefault inputControllerDefault;
-    
-    public static InputController[] Num
+
+    private static InputController[] num;
+    private static InputController[] Num
     {
         get
         {
@@ -49,7 +50,7 @@ public partial class Input
             return num;
         }
 
-        private set
+        set
         {
             num = value;
         }
@@ -58,13 +59,13 @@ public partial class Input
     public static Action<int> OnControllerDisconnected;
     public static Action<int> OnControllerConnected;
 
+    static int joyLength = 0;
     public static bool CheckInputInFixedUpdate = false;
-
-    private const string INVALID_CONTROLLER = "Wireless Controller";
+    private static readonly string[] INVALID_CONTROLLERS = new string[] { "Wireless Controller"};
 
     private static ControllerStatus CheckIfControllerIsConnected(int i)
     {
-        return GetJoystickNames().Length > i ? !string.IsNullOrEmpty(GetJoystickNames()[i]) && (GetJoystickNames()[i] !=INVALID_CONTROLLER) ? ControllerStatus.Connected : ControllerStatus.Disconnected : ControllerStatus.Disconnected;
+        return GetJoystickNames().Length > i ? !string.IsNullOrEmpty(GetJoystickNames()[i]) && ( !INVALID_CONTROLLERS.Contains(GetJoystickNames()[i])) ? ControllerStatus.Connected : ControllerStatus.Disconnected : ControllerStatus.Disconnected;
     }
 
     private static ControllerStatus CheckStatus(InputController inputController)
@@ -76,7 +77,23 @@ public partial class Input
         return CheckIfControllerIsConnected(inputController.ControllerNumber);
     }
 
-    static int joyLength = 0;
+    public static InputController GetController(int controllerNum)
+    {
+        return Num[controllerNum];
+    }
+    public static InputController GetController(ControllerNum controllerNum)
+    {
+        return Num[(int)controllerNum];
+    }
+    public static T GetController<T>(int controllerNum) where T : InputController
+    {
+        return (T)Num[controllerNum];
+    }
+    public static T GetController<T>(ControllerNum controllerNum) where T : InputController
+    {
+        return (T)Num[(int)controllerNum];
+    }
+
 
     private static void Update()
     {
@@ -116,7 +133,7 @@ public partial class Input
                 }
                 for (int x = 0; x < joyLength; x++)
                 {
-                    if (!string.IsNullOrEmpty(currentJoyNames[x]) && currentJoyNames[x] != INVALID_CONTROLLER)
+                    if (!string.IsNullOrEmpty(currentJoyNames[x]) && !INVALID_CONTROLLERS.Contains(currentJoyNames[x]))
                     {
                         bool isFree = true;
                         for (int ii = 0; ii < 4; ii++)
@@ -299,21 +316,11 @@ public partial class Input
         bf.Serialize(file, data);
         file.Close();
     }
-#if UNITY_EDITOR
-    [UnityEditor.InitializeOnLoadMethod]
-    static void ConfigureEditorForInput()
+    [RunOnGameInitialized]
+    public static void HI()
     {
-        UnityEditor.EditorBuildSettingsScene[] sceneSetups = UnityEditor.EditorBuildSettings.scenes;
-        if (!sceneSetups.Any(x => x.path.Contains("InputLoader.unity")))
-        {
-            string path = AssetDatabase.FindAssets("InputLoader").Where(x=>AssetDatabase.GUIDToAssetPath(x).Contains("/InputLoader.unity")).First();
-            path = AssetDatabase.GUIDToAssetPath(path);
-            EditorBuildSettings.scenes = EditorBuildSettings.scenes.Concat(new EditorBuildSettingsScene[] { new EditorBuildSettingsScene(path, true) }).ToArray();
-            Debug.Log("Added InputLoader scene to build settings.");
-        }
-
+        Debug.Log("RanOnGameInitialized");
     }
-#endif
     [RunOnGameInitialized]
     public static void LoadSettings()
     {
@@ -360,5 +367,5 @@ public partial class Input
     }
 }
 
-
+public enum ControllerNum { One, Two, Tnree, Four}
 public enum ControllerStatus { Disconnected, Connected }

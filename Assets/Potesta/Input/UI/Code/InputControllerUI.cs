@@ -10,12 +10,12 @@ namespace Potesta.FlexInput
         private int controllerNum;
         public InputAssignmentField inputInterfaceUIPrefab;
         private List<InputAssignmentField> inputAssignmentFields = new List<InputAssignmentField>();
-        public InputController Controller { get { return Input.Num[ControllerNum]; } }
+        public InputController Controller { get { return Input.GetController(ControllerNum); } }
 
         void Start()
         {
             if (inputInterfaceUIPrefab == null) { Debug.LogError("No InputInterfaceUIPrefab found, please assign."); return; }
-            for (int i = 0; i < Input.Num[ControllerNum].InputMaps.Length; i++)
+            for (int i = 0; i < Input.GetController(ControllerNum).InputMaps.Length; i++)
             {
                 InputAssignmentField field = CreateInputInterface(Controller.InputMaps[i]);
                 RectTransform elementRectTransform = field.GetComponent<RectTransform>();
@@ -31,7 +31,7 @@ namespace Potesta.FlexInput
 
         private void UpdateFields()
         {
-            for (int i = 0; i < Input.Num[ControllerNum].InputMaps.Length; i++)
+            for (int i = 0; i < Input.GetController(ControllerNum).InputMaps.Length; i++)
             {
                 inputAssignmentFields[i].fieldInfoTarget = Controller.InputMaps[i];
                 inputAssignmentFields[i].UpdateUI();

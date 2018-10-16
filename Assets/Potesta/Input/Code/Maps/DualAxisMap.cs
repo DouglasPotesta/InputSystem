@@ -24,7 +24,8 @@ namespace Potesta.FlexInput
         public DualAxisMapData DualAxisMapData { get { return dualAxisMapData; } }
         [SerializeField]
         private DualAxisMapData dualAxisMapData;
-
+        public float x { get { return ((Vector2)this).x; } }
+        public float y { get { return ((Vector2)this).y; } }
         private Vector2 serialValue { get { return new Vector2(xAxisMap, yAxisMap); } }
 
         public DualAxisMap(DualAxisMapData _dualAxisMapData, InputController _inputController) : base(_inputController)

@@ -142,13 +142,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Assets:
-  - {fileID: 11400000, guid: 0f75f5f0b0592d045bac4892831c07b1, type: 2}
-  - {fileID: 11400000, guid: f4cc0d31537d6b640969e5e407ba6700, type: 2}
-  - {fileID: 11400000, guid: fc9298874eb68634999ffab0a3d64c1f, type: 2}
-  - {fileID: 11400000, guid: d13cbebdaa897b149934174477810b77, type: 2}
+  - {fileID: 11400000, guid: fef92be2c40a46746b317504552d1b4e, type: 2}
+  - {fileID: 11400000, guid: 729ed92f49d1f7f49833eebba5b2292e, type: 2}
+  - {fileID: 11400000, guid: 3fa577cabcf68a243834d2750f324116, type: 2}
+  - {fileID: 11400000, guid: b8ac47fef7b5f0543862fe54c5915922, type: 2}
   allScenes:
-  - sceneAsset: {fileID: 102900000, guid: 8949e34a9d34f1b4ca573fcf177a7808, type: 3}
-    name: InputLoader
   - sceneAsset: {fileID: 102900000, guid: 563361a9d31a9514b8c7c63fd140cc4f, type: 3}
     name: ExampleTestInput
   - sceneAsset: {fileID: 102900000, guid: 9d5ffc0b12b5ddd48a49b2b482b19199, type: 3}

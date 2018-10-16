@@ -6,6 +6,8 @@ using System.Reflection;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 namespace Potesta {
     public class GameInitializerEditor : GameInitializer {
 
@@ -22,25 +24,33 @@ namespace Potesta {
                 Debug.Log("Added" + SCENE_NAME + "scene to build settings.");
             }
         }
-#endif
-#if UNITY_EDITOR
-        [RunOnPreProcessBuild]
-        [RunOnGameInitialized]
-        private static void GrabInitializationNecessaryComponents()
-        {
-            Type type = typeof(IncludeInStartUpAttribute);
-            List<Type> types = new List<Type>();
-            types.AddRange(Assembly.GetAssembly(typeof(GameInitializer)).GetTypes()
-              .Where(m => m.GetCustomAttributes(type, false).Length > 0));
-            for (int i = 0; i < types.Count; i++)
-            {
-                GameInitializer.assets().AddRange(AssetDatabase.FindAssets("t:" + types[i].Name).Select(x => AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(x), types[i])).Where(x => x != null && !GameInitializer.assets().Contains(x)).ToArray());
-            }
-        }
         private static void GrabInitializationComponents(AsyncOperation asyncOperation)
         {
-
             asyncOperation.completed -= GrabInitializationComponents;
+        }
+        [RunOnPreProcessBuild]
+        private static void IncludeAssetsInBuild()
+        {
+            BuildProcessing.ProcessScene(GameInitializer.SCENE_NAME, true, (Scene scene) =>
+            {
+                GameInitializer gameInitializer = GameObject.FindObjectOfType<GameInitializer>();
+                Type[] types = BuildProcessing.GetAllTypesWithAttributeType(typeof(IncludeInStartUpAttribute), false);
+                for (int i = 0; i < types.Length; i++)
+                {
+                    string[] assetsToInclude = AssetDatabase.FindAssets("t:" + types[i].Name);
+                    for (int ii = 0; ii < assetsToInclude.Length; ii++)
+                    {
+                        string assetPath = AssetDatabase.GUIDToAssetPath(assetsToInclude[ii]);
+                        UnityEngine.Object asset = AssetDatabase.LoadAssetAtPath(assetPath, types[i]);
+                        gameInitializer.AddAsset(asset);
+                        if (EditorUtility.DisplayCancelableProgressBar("Adding Assets", "Processing " + types[i].Name + "s: \"" + assetsToInclude + "\"", ((float)i / types.Length) + ((float)ii / assetsToInclude.Length) / types.Length))
+                        {
+                            Debug.LogWarning("Adding Assets To Build canceled by user.");
+                            break;
+                        }
+                    }
+                }
+            });
         }
 #endif
     }

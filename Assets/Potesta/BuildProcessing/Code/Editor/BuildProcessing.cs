@@ -20,7 +20,8 @@ namespace Potesta
               .Where(m => m.GetCustomAttributes(type, false).Length > 0)));
             if (IncludeEditor)
             {
-                methodInfos.AddRange(Assembly.GetCallingAssembly().GetTypes().SelectMany(t => t.GetMethods()
+                Type[] types = Assembly.GetCallingAssembly().GetTypes();
+                methodInfos.AddRange(types.SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
                   .Where(m => m.GetCustomAttributes(type, false).Length > 0)));
             }
             return methodInfos.ToArray();
@@ -100,11 +101,59 @@ namespace Potesta
             EditorSceneManager.RestoreSceneManagerSetup(sceneSetups);
             return Completed;
         }
+
+        public static bool ProcessScene(string sceneName, Action<UnityEngine.SceneManagement.Scene> customProcess)
+        {
+            return ProcessScene(sceneName, "customProcess", false, customProcess);
+        }
+
+        public static bool ProcessScene(string sceneName, string processName, Action<UnityEngine.SceneManagement.Scene> customProcess)
+        {
+            return ProcessScene(sceneName, processName, false, customProcess);
+        }
+
+        public static bool ProcessScene(string sceneName, bool saveScenes, Action<UnityEngine.SceneManagement.Scene> customProcess)
+        {
+            return ProcessScene(sceneName, "customProcess", saveScenes, customProcess);
+        }
+
+        public static bool ProcessScene(string sceneName, string processName, bool saveScenes, Action<UnityEngine.SceneManagement.Scene> customProcess)
+        {
+            bool Completed = true;
+            SceneSetup[] sceneSetups = EditorSceneManager.GetSceneManagerSetup();
+            if (saveScenes)
+            {
+                if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+                {
+                    return false;
+                }
+            }
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            try
+            {
+                Scene scene = EditorSceneManager.OpenScene(EditorBuildSettings.scenes.First(x=>x.path.Contains(sceneName)).path, OpenSceneMode.Single);
+                customProcess(scene);
+                if (saveScenes)
+                {
+                    EditorSceneManager.MarkSceneDirty(scene);
+                    EditorSceneManager.SaveOpenScenes();
+                    EditorSceneManager.CloseScene(scene, true);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
+            EditorUtility.ClearProgressBar();
+            EditorSceneManager.RestoreSceneManagerSetup(sceneSetups);
+            return Completed;
+        }
         public static void PreprocessBuild(BuildTarget target, string path)
         {
             if (EditorUserBuildSettings.buildScriptsOnly) { return; }
             Type ROPPBAType = typeof(RunOnPreProcessBuildAttribute);
-            MethodInfo[] bMethods = GetAllMethodsWithAttributeType(ROPPBAType).OrderBy(item => ((RunOnPreProcessBuildAttribute)item.GetCustomAttributes(ROPPBAType, true).First()).order).ToArray();
+            MethodInfo[] bMethods = GetAllMethodsWithAttributeType(ROPPBAType, true).OrderBy(item => ((RunOnPreProcessBuildAttribute)item.GetCustomAttributes(ROPPBAType, true).First()).order).ToArray();
             for (int ii = 0; ii < bMethods.Length; ii++)
             {
                 ParameterInfo[] paramaters = bMethods[ii].GetParameters();
@@ -121,7 +170,7 @@ namespace Potesta
 
 
             Type ROPPsBAType = typeof(RunOnPreProcessScenesBuildAttribute);
-            MethodInfo[] sMethods = GetAllMethodsWithAttributeType(ROPPsBAType).OrderBy(item => ((RunOnPreProcessScenesBuildAttribute)item.GetCustomAttributes(ROPPsBAType, true).First()).order).ToArray();
+            MethodInfo[] sMethods = GetAllMethodsWithAttributeType(ROPPsBAType, true).OrderBy(item => ((RunOnPreProcessScenesBuildAttribute)item.GetCustomAttributes(ROPPsBAType, true).First()).order).ToArray();
             if (sMethods.Length == 0) { return; }
             ProcessAllScenes("PreProcesses", (Scene scene) =>
             {

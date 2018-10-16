@@ -18,7 +18,7 @@ namespace Potesta
     , ISerializationCallbackReceiver
 #endif
     {
-        protected const string SCENE_NAME = "GameInitializationScene";
+        public const string SCENE_NAME = "GameInitializationScene";
         protected static GameInitializer singleton;
         internal static System.Action OnUpdate;
         [SerializeField]
@@ -162,6 +162,29 @@ namespace Potesta
         public void OnAfterDeserialize()
         {
 
+        }
+
+        public void AddAsset(Object asset)
+        {
+            if (!Assets.Contains(asset))
+            {
+                Assets.Add(asset);
+            }
+        }
+        [RunOnGameInitialized]
+        public static void GrabAllAssets()
+        {
+            if (Application.isPlaying)
+            {
+                System.Type type = typeof(IncludeInStartUpAttribute);
+                List<System.Type> types = new List<System.Type>();
+                types.AddRange(Assembly.GetAssembly(typeof(GameInitializer)).GetTypes()
+                  .Where(m => m.GetCustomAttributes(type, false).Length > 0));
+                for (int i = 0; i < types.Count; i++)
+                {
+                    assets().AddRange(AssetDatabase.FindAssets("t:" + types[i].Name).Select(x => AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(x), types[i])).Where(x => x != null && !GameInitializer.assets().Contains(x)).ToArray());
+                }
+            }
         }
 #endif
     }
