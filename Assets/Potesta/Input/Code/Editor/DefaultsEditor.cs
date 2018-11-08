@@ -8,10 +8,24 @@ using System.Reflection;
 namespace Potesta.FlexInput
 {
     [CustomEditor(typeof(InputControllerDefault))]
-    public class DefaultsEditor : Editor
+    public class __DEFAULTSEDITOR__ : Editor
+    {
+        DefaultsEditor editor;
+        public void OnEnable()
+        {
+            editor = new DefaultsEditor((InputControllerDefault)target);
+            editor.OnEnable();
+        }
+        public override void OnInspectorGUI()
+        {
+            editor.OnInspectorGUI();
+        }
+    }
+    public class DefaultsEditor
     {
 
         private List<Type> inputControllerClasses;
+        public InputControllerDefault target;
 
         private List<Type> ICCS
         {
@@ -26,6 +40,10 @@ namespace Potesta.FlexInput
             }
         }
 
+        public DefaultsEditor(InputControllerDefault inputControllerDefault)
+        {
+            target = inputControllerDefault;
+        }
 
         public void OnEnable()
         {
@@ -56,14 +74,14 @@ namespace Potesta.FlexInput
             }
         }
 
-        public override void OnInspectorGUI()
+        public void OnInspectorGUI()
         {
             InputControllerDefault targ = (InputControllerDefault)target;
             EditorGUI.BeginChangeCheck();
             Type controllerSelection = ICCS[EditorGUILayout.Popup("Controller Class", ICCS.IndexOf(targ.InputControllerType), ICCS.Select(x => x.FullName).ToArray())];
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(targ, "Changed Controller Selection");
+                Undo.RegisterCompleteObjectUndo(targ, "Changed Controller Selection");
                 targ.InputControllerType = controllerSelection;
                 EditorUtility.SetDirty(targ);
             }
@@ -85,7 +103,7 @@ namespace Potesta.FlexInput
             RuntimePlatform newRuntimePlatform = (RuntimePlatform)EditorGUILayout.EnumPopup("Platform", inputControllerDefault.runtimePlatform);
             if (EditorGUI.EndChangeCheck() && inputControllerDefault.runtimePlatform != newRuntimePlatform)
             {
-                Undo.RecordObject(target, "Changed Input Platform");
+                Undo.RegisterCompleteObjectUndo(target, "Changed Input Platform");
                 inputControllerDefault.runtimePlatform = newRuntimePlatform;
                 inputControllerDefault.inputController = (InputController)Activator.CreateInstance(inputControllerDefault.InputControllerType);
             }
@@ -129,7 +147,7 @@ namespace Potesta.FlexInput
             bool changeToVirtual = EditorGUILayout.Popup("Axis Type", axisMap.IsVirtual ? 1 : 0, new string[] { "Direct", "Virtual" }) == 1;
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(target, ((axisMap.IsVirtual ? "Changed to Real Axis for" : "Changed to Virtual Axis") + axisMap.Name));
+                Undo.RegisterCompleteObjectUndo(target, ((axisMap.IsVirtual ? "Changed to Real Axis for" : "Changed to Virtual Axis") + axisMap.Name));
                 AxisMapData axisMapData = axisMap.AxisMapData;
                 axisMapData.isVirtual = changeToVirtual;
                 axisMapData.negativeAxisName = axisMapData.isVirtual ? "0" : "";
@@ -144,7 +162,7 @@ namespace Potesta.FlexInput
                 bool isInverted = EditorGUILayout.Toggle("Invert Axis", axisMap.IsInverted);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    Undo.RecordObject(target, ("Changed Inversion of " + axisMap.Name));
+                    Undo.RegisterCompleteObjectUndo(target, ("Changed Inversion of " + axisMap.Name));
                     AxisMapData axisMapData = axisMap.AxisMapData;
                     axisMapData.isInverted = isInverted;
                     typeof(AxisMap).GetField("axisMapData", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).SetValue(axisMap, axisMapData);
@@ -207,7 +225,7 @@ namespace Potesta.FlexInput
             int newBut = EditorGUILayout.Popup(joyButtons.Keys.OrderBy(x => x).ToList().IndexOf(buttonMap.ButtonMapData.buttonMapName), joyButtonArrayNames);
             if (EditorGUI.EndChangeCheck())
             {
-                Undo.RecordObject(target, ("Changed mapping of " + buttonMap.Name));
+                Undo.RegisterCompleteObjectUndo(target, ("Changed mapping of " + buttonMap.Name));
                 string val = joyButtons.Keys.ToArray().OrderBy(x => x).ToArray()[newBut];
                 ButtonMapData buttonMapData = buttonMap.ButtonMapData;
                 buttonMapData.buttonMapName = val;

@@ -69,7 +69,7 @@ namespace Potesta.FlexInput
                 int buttonNum;
                 if (int.TryParse(PositiveAxisName, out buttonNum))
                 {
-                    PostiveAxisString = Input.GetJoyButtonString(controller.ControllerNumber, buttonNum);
+                    PostiveAxisString = Input.GetJoyButtonString(controller.RawControllerNumber, buttonNum);
                 }
                 else
                 {
@@ -79,7 +79,7 @@ namespace Potesta.FlexInput
                 {
                     if (int.TryParse(NegativeAxisName, out buttonNum))
                     {
-                        NegativeAxisString = Input.GetJoyButtonString(controller.ControllerNumber, buttonNum);
+                        NegativeAxisString = Input.GetJoyButtonString(controller.RawControllerNumber, buttonNum);
                     }
                     else
                     {
@@ -92,7 +92,7 @@ namespace Potesta.FlexInput
                 int buttonNum;
                 if (int.TryParse(PositiveAxisName, out buttonNum))
                 {
-                    PostiveAxisString = Input.GetJoyAxisString(controller.ControllerNumber, buttonNum);
+                    PostiveAxisString = Input.GetJoyAxisString(controller.RawControllerNumber, buttonNum);
                 }
                 else
                 {
@@ -102,7 +102,7 @@ namespace Potesta.FlexInput
                 {
                     if (int.TryParse(NegativeAxisName, out buttonNum))
                     {
-                        NegativeAxisString = Input.GetJoyAxisString(controller.ControllerNumber, buttonNum);
+                        NegativeAxisString = Input.GetJoyAxisString(controller.RawControllerNumber, buttonNum);
                     }
                     else
                     {
@@ -215,7 +215,7 @@ namespace Potesta.FlexInput
 
         public override string ToString()
         {
-            if (Input.GetJoystickNames().Length > controller.ControllerNumber && Input.GetJoystickNames()[controller.ControllerNumber].ToLower().Contains("box"))
+            if (Input.GetJoystickNames().Length > controller.RawControllerNumber && Input.GetJoystickNames()[controller.RawControllerNumber].ToLower().Contains("box"))
             {
                 return Input.JoyAxisNumToXboxControllerMap(MapMessage);
             }

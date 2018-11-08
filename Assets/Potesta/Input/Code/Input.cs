@@ -13,7 +13,7 @@ using UnityEditor;
 public partial class Input 
 {
     static readonly string[] axesNames = new string[] { "mouse_axis_0", "mouse_axis_1", "mouse_axis_2", "joy_0_axis_0", "joy_0_axis_1", "joy_0_axis_2", "joy_0_axis_3", "joy_0_axis_4", "joy_0_axis_5", "joy_0_axis_6", "joy_0_axis_7", "joy_0_axis_8", "joy_0_axis_9", "joy_0_axis_10", "joy_0_axis_11", "joy_0_axis_12", "joy_0_axis_13", "joy_0_axis_14", "joy_0_axis_15", "joy_0_axis_16", "joy_0_axis_17", "joy_0_axis_18", "joy_0_axis_19", "joy_0_axis_20", "joy_0_axis_21", "joy_0_axis_22", "joy_0_axis_23", "joy_0_axis_24", "joy_0_axis_25", "joy_0_axis_26", "joy_0_axis_27", "joy_1_axis_0", "joy_1_axis_1", "joy_1_axis_2", "joy_1_axis_3", "joy_1_axis_4", "joy_1_axis_5", "joy_1_axis_6", "joy_1_axis_7", "joy_1_axis_8", "joy_1_axis_9", "joy_1_axis_10", "joy_1_axis_11", "joy_1_axis_12", "joy_1_axis_13", "joy_1_axis_14", "joy_1_axis_15", "joy_1_axis_16", "joy_1_axis_17", "joy_1_axis_18", "joy_1_axis_19", "joy_1_axis_20", "joy_1_axis_21", "joy_1_axis_22", "joy_1_axis_23", "joy_1_axis_24", "joy_1_axis_25", "joy_1_axis_26", "joy_1_axis_27", "joy_2_axis_0", "joy_2_axis_1", "joy_2_axis_2", "joy_2_axis_3", "joy_2_axis_4", "joy_2_axis_5", "joy_2_axis_6", "joy_2_axis_7", "joy_2_axis_8", "joy_2_axis_9", "joy_2_axis_10", "joy_2_axis_11", "joy_2_axis_12", "joy_2_axis_13", "joy_2_axis_14", "joy_2_axis_15", "joy_2_axis_16", "joy_2_axis_17", "joy_2_axis_18", "joy_2_axis_19", "joy_2_axis_20", "joy_2_axis_21", "joy_2_axis_22", "joy_2_axis_23", "joy_2_axis_24", "joy_2_axis_25", "joy_2_axis_26", "joy_2_axis_27", "joy_3_axis_0", "joy_3_axis_1", "joy_3_axis_2", "joy_3_axis_3", "joy_3_axis_4", "joy_3_axis_5", "joy_3_axis_6", "joy_3_axis_7", "joy_3_axis_8", "joy_3_axis_9", "joy_3_axis_10", "joy_3_axis_11", "joy_3_axis_12", "joy_3_axis_13", "joy_3_axis_14", "joy_3_axis_15", "joy_3_axis_16", "joy_3_axis_17", "joy_3_axis_18", "joy_3_axis_19", "joy_3_axis_20", "joy_3_axis_21", "joy_3_axis_22", "joy_3_axis_23", "joy_3_axis_24", "joy_3_axis_25", "joy_3_axis_26", "joy_3_axis_27", "joy_4_axis_0", "joy_4_axis_1", "joy_4_axis_2", "joy_4_axis_3", "joy_4_axis_4", "joy_4_axis_5", "joy_4_axis_6", "joy_4_axis_7", "joy_4_axis_8", "joy_4_axis_9", "joy_4_axis_10", "joy_4_axis_11", "joy_4_axis_12", "joy_4_axis_13", "joy_4_axis_14", "joy_4_axis_15", "joy_4_axis_16", "joy_4_axis_17", "joy_4_axis_18", "joy_4_axis_19", "joy_4_axis_20", "joy_4_axis_21", "joy_4_axis_22", "joy_4_axis_23", "joy_4_axis_24", "joy_4_axis_25", "joy_4_axis_26", "joy_4_axis_27", "joy_5_axis_0", "joy_5_axis_1", "joy_5_axis_2", "joy_5_axis_3", "joy_5_axis_4", "joy_5_axis_5", "joy_5_axis_6", "joy_5_axis_7", "joy_5_axis_8", "joy_5_axis_9", "joy_5_axis_10", "joy_5_axis_11", "joy_5_axis_12", "joy_5_axis_13", "joy_5_axis_14", "joy_5_axis_15", "joy_5_axis_16", "joy_5_axis_17", "joy_5_axis_18", "joy_5_axis_19", "joy_5_axis_20", "joy_5_axis_21", "joy_5_axis_22", "joy_5_axis_23", "joy_5_axis_24", "joy_5_axis_25", "joy_5_axis_26", "joy_5_axis_27", "joy_6_axis_0", "joy_6_axis_1", "joy_6_axis_2", "joy_6_axis_3", "joy_6_axis_4", "joy_6_axis_5", "joy_6_axis_6", "joy_6_axis_7", "joy_6_axis_8", "joy_6_axis_9", "joy_6_axis_10", "joy_6_axis_11", "joy_6_axis_12", "joy_6_axis_13", "joy_6_axis_14", "joy_6_axis_15", "joy_6_axis_16", "joy_6_axis_17", "joy_6_axis_18", "joy_6_axis_19", "joy_6_axis_20", "joy_6_axis_21", "joy_6_axis_22", "joy_6_axis_23", "joy_6_axis_24", "joy_6_axis_25", "joy_6_axis_26", "joy_6_axis_27", "joy_7_axis_0", "joy_7_axis_1", "joy_7_axis_2", "joy_7_axis_3", "joy_7_axis_4", "joy_7_axis_5", "joy_7_axis_6", "joy_7_axis_7", "joy_7_axis_8", "joy_7_axis_9", "joy_7_axis_10", "joy_7_axis_11", "joy_7_axis_12", "joy_7_axis_13", "joy_7_axis_14", "joy_7_axis_15", "joy_7_axis_16", "joy_7_axis_17", "joy_7_axis_18", "joy_7_axis_19", "joy_7_axis_20", "joy_7_axis_21", "joy_7_axis_22", "joy_7_axis_23", "joy_7_axis_24", "joy_7_axis_25", "joy_7_axis_26", "joy_7_axis_27", "joy_8_axis_0", "joy_8_axis_1", "joy_8_axis_2", "joy_8_axis_3", "joy_8_axis_4", "joy_8_axis_5", "joy_8_axis_6", "joy_8_axis_7", "joy_8_axis_8", "joy_8_axis_9", "joy_8_axis_10", "joy_8_axis_11", "joy_8_axis_12", "joy_8_axis_13", "joy_8_axis_14", "joy_8_axis_15", "joy_8_axis_16", "joy_8_axis_17", "joy_8_axis_18", "joy_8_axis_19", "joy_8_axis_20", "joy_8_axis_21", "joy_8_axis_22", "joy_8_axis_23", "joy_8_axis_24", "joy_8_axis_25", "joy_8_axis_26", "joy_8_axis_27", "joy_9_axis_0", "joy_9_axis_1", "joy_9_axis_2", "joy_9_axis_3", "joy_9_axis_4", "joy_9_axis_5", "joy_9_axis_6", "joy_9_axis_7", "joy_9_axis_8", "joy_9_axis_9", "joy_9_axis_10", "joy_9_axis_11", "joy_9_axis_12", "joy_9_axis_13", "joy_9_axis_14", "joy_9_axis_15", "joy_9_axis_16", "joy_9_axis_17", "joy_9_axis_18", "joy_9_axis_19", "joy_9_axis_20", "joy_9_axis_21", "joy_9_axis_22", "joy_9_axis_23", "joy_9_axis_24", "joy_9_axis_25", "joy_9_axis_26", "joy_9_axis_27", "joy_10_axis_0", "joy_10_axis_1", "joy_10_axis_2", "joy_10_axis_3", "joy_10_axis_4", "joy_10_axis_5", "joy_10_axis_6", "joy_10_axis_7", "joy_10_axis_8", "joy_10_axis_9", "joy_10_axis_10", "joy_10_axis_11", "joy_10_axis_12", "joy_10_axis_13", "joy_10_axis_14", "joy_10_axis_15", "joy_10_axis_16", "joy_10_axis_17", "joy_10_axis_18", "joy_10_axis_19", "joy_10_axis_20", "joy_10_axis_21", "joy_10_axis_22", "joy_10_axis_23", "joy_10_axis_24", "joy_10_axis_25", "joy_10_axis_26", "joy_10_axis_27" };
-    public static int JoystickCount { get { return UInput.GetJoystickNames().Where(x => (x != null && x != "")).Count(); } }
+    public static int JoystickCount { get { return UInput.GetJoystickNames().Where(x => !INVALID_CONTROLLERS.Contains(x)).Count(); } }
 
     public static int ControllerCount { get { return Mathf.Min(JoystickCount + (Num.All(x=>x.Gamepad) ? 0 : 1), 4); } }
 
@@ -61,11 +61,14 @@ public partial class Input
 
     static int joyLength = 0;
     public static bool CheckInputInFixedUpdate = false;
-    private static readonly string[] INVALID_CONTROLLERS = new string[] { "Wireless Controller"};
+    private static readonly string[] INVALID_CONTROLLERS = new string[] {
+        "Wireless Controller",
+        null,
+        "" };
 
     private static ControllerStatus CheckIfControllerIsConnected(int i)
     {
-        return GetJoystickNames().Length > i ? !string.IsNullOrEmpty(GetJoystickNames()[i]) && ( !INVALID_CONTROLLERS.Contains(GetJoystickNames()[i])) ? ControllerStatus.Connected : ControllerStatus.Disconnected : ControllerStatus.Disconnected;
+        return GetJoystickNames().Length > i ? !INVALID_CONTROLLERS.Contains(GetJoystickNames()[i]) ? ControllerStatus.Connected : ControllerStatus.Disconnected : ControllerStatus.Disconnected;
     }
 
     private static ControllerStatus CheckStatus(InputController inputController)
@@ -74,7 +77,7 @@ public partial class Input
         {
             return ControllerStatus.Connected;
         }
-        return CheckIfControllerIsConnected(inputController.ControllerNumber);
+        return CheckIfControllerIsConnected(inputController.RawControllerNumber);
     }
 
     public static InputController GetController(int controllerNum)
@@ -93,7 +96,6 @@ public partial class Input
     {
         return (T)Num[(int)controllerNum];
     }
-
 
     private static void Update()
     {
@@ -120,8 +122,8 @@ public partial class Input
         int[] controllerNumbers = Enumerable.Repeat(-1, Num.Length).ToArray();
         for (int i = 0; i < Num.Length; i++)
         {
-            if (controllerNumbers.Contains(Num[i].ControllerNumber)) { Num[i].DisconnectController(); }
-            else { controllerNumbers[i] = Num[i].ControllerNumber; }
+            if (controllerNumbers.Contains(Num[i].RawControllerNumber)) { Num[i].DisconnectController(); }
+            else { controllerNumbers[i] = Num[i].RawControllerNumber; }
         }
         for (int i = 0; i < 4; i++)
         {
@@ -138,11 +140,11 @@ public partial class Input
                         bool isFree = true;
                         for (int ii = 0; ii < 4; ii++)
                         {
-                            isFree &= Num[ii].ControllerNumber != x;
+                            isFree &= Num[ii].RawControllerNumber != x;
                         }
                         if (isFree)
                         {
-                            Num[i].ControllerNumber = x;
+                            Num[i].RawControllerNumber = x;
                             Num[i].InitializeControls();
                             Num[i].controllerStatus = ControllerStatus.Connected;
                             JoystickAdded(i);
@@ -171,7 +173,7 @@ public partial class Input
         string[] requirements = new string[0];
         if (_inputController.Gamepad)
         {
-            requirements = new string[] { ("joy_" + _inputController.ControllerNumber.ToString() + "_axis_") };
+            requirements = new string[] { ("joy_" + _inputController.RawControllerNumber.ToString() + "_axis_") };
         }
         else
         {
@@ -186,7 +188,7 @@ public partial class Input
         string[] requirements = new string[0];
         if (_inputController.Gamepad)
         {
-            requirements = new string[] { ("joy_" + _inputController.ControllerNumber.ToString() + "_axis_") };
+            requirements = new string[] { ("joy_" + _inputController.RawControllerNumber.ToString() + "_axis_") };
         }
         else
         {
@@ -247,7 +249,7 @@ public partial class Input
         string[] requirements = new string[0];
         if (_inputController.Gamepad)
         {
-            requirements = new string[] { ("Joystick" + (_inputController.ControllerNumber + 1).ToString() + "Button") };
+            requirements = new string[] { ("Joystick" + (_inputController.RawControllerNumber + 1).ToString() + "Button") };
         }
         else
         {
@@ -317,11 +319,6 @@ public partial class Input
         file.Close();
     }
     [RunOnGameInitialized]
-    public static void HI()
-    {
-        Debug.Log("RanOnGameInitialized");
-    }
-    [RunOnGameInitialized]
     public static void LoadSettings()
     {
         GameInitializer.OnUpdate += Update;
@@ -358,6 +355,20 @@ public partial class Input
             Num[i].controllerStatus = CheckStatus(Num[i]);
         }
     }
+
+#if UNITY_EDITOR
+    [UnityEditor.Callbacks.DidReloadScripts]
+    private static void UpdateScriptingSymbols()
+    {
+        UnityEditor.BuildTargetGroup selectedBuildTargetGroup = UnityEditor.EditorUserBuildSettings.selectedBuildTargetGroup;
+        string scriptSymbols = UnityEditor.PlayerSettings.GetScriptingDefineSymbolsForGroup(selectedBuildTargetGroup);
+        if (!scriptSymbols.Contains("FLEXINPUT"))
+        {
+            UnityEditor.PlayerSettings.SetScriptingDefineSymbolsForGroup(selectedBuildTargetGroup,
+            scriptSymbols + ", FLEXINPUT");
+        }
+    }
+#endif
 
     public static void ResetAllSettings()
     {

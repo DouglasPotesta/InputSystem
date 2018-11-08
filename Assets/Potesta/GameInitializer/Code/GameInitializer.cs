@@ -21,6 +21,8 @@ namespace Potesta
         public const string SCENE_NAME = "GameInitializationScene";
         protected static GameInitializer singleton;
         internal static System.Action OnUpdate;
+        internal static System.Action OnFixedUpdate;
+        internal static System.Action OnGUIUpdate;
         [SerializeField]
         protected List<UnityEngine.Object> Assets = new List<Object>();
 
@@ -83,6 +85,20 @@ namespace Potesta
             if (OnUpdate != null)
             {
                 OnUpdate();
+            }
+        }
+        void FixedUpdate()
+        {
+            if(OnFixedUpdate != null)
+            {
+                OnFixedUpdate();
+            }
+        }
+        void OnGUI()
+        {
+            if (OnGUIUpdate != null)
+            {
+                OnGUIUpdate();
             }
         }
 

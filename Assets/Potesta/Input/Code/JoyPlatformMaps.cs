@@ -179,6 +179,92 @@ namespace Potesta.FlexInput
             {"15","D-Pad Right" }
         };
 
+        public static readonly Dictionary<string, string> PS4WinButtons =
+new Dictionary<string, string>
+{
+        {"0","A" },
+            {"1","B" },
+            {"2","X" },
+            {"3","Y" },
+            {"4","Left Bumper" },
+            {"5","Right Bumper" },
+            {"6","Back Button" },
+            {"7","Start Button" },
+            {"8","Left Stick Click" },
+            {"9","Right Stick Click" },
+};
+        public static readonly Dictionary<string, string> PS4MacButtons =
+new Dictionary<string, string>
+{
+            {"16","A" },
+            {"17","B" },
+            {"18","X" },
+            {"19","Y" },
+            {"13","Left Bumper" },
+            {"14","Right Bumper" },
+            {"10","Back Button" },
+            {"9","Start Button" },
+            {"11","Left Stick Click" },
+            {"12","Right Stick Click" },
+            {"5","D-Pad Up" },
+            {"6","D-Pad Down" },
+            {"7","D-Pad Left" },
+            {"8","D-Pad Right" },
+            {"15","Xbox Button" }
+};
+        public static readonly Dictionary<string, string> PS4LinuxButtons =
+new Dictionary<string, string>
+{
+            {"0","A" },
+            {"1","B" },
+            {"2","X" },
+            {"3","Y" },
+            {"4","Left Bumper" },
+            {"5","Right Bumper" },
+            {"6","Back Button" },
+            {"7","Start Button" },
+            {"9","Left Stick Click" },
+            {"10","Right Stick Click" },
+            {"13","D-Pad Up" },
+            {"14","D-Pad Down" },
+            {"11","D-Pad Left" },
+            {"12","D-Pad Right" }
+};
+        public static readonly Dictionary<string, string> PS4WindowsAxes = new Dictionary<string, string>
+        {
+            {"0","Left Stick ←→" },
+            {"1","Left Stick ↓↑" },
+            {"3","Right Stick ←→" },
+            {"4","Right Stick ↓↑" },
+            {"6","D-Pad ↓↑)" },
+            {"5","D-Pad ←→" },
+            {"9","Right Trigger →" },
+            {"8","Left Trigger →" },
+            {"10","Right Trigger →" },
+        };
+
+        public static readonly Dictionary<string, string> PS4MacAxes = new Dictionary<string, string>
+    {
+            {"0","Left Stick ←→" },
+            {"1","Left Stick ↓↑" },
+            {"3","Right Stick ↓↑" },
+            {"4","Right Stick ←→" },
+            {"5","Left Trigger →" },
+            {"6","Right Trigger →" },
+    };
+
+        public static readonly Dictionary<string, string> PS4LinuxAxes = new Dictionary<string, string>()
+    {
+            {"0","Left Stick ←→" },
+            {"1","Left Stick ↓↑" },
+            {"4","Right Stick ↓↑" },
+            {"5","Right Stick ←→" },
+            {"7","D-Pad ↓↑" },
+            {"8","D-Pad ←→" },
+            {"3","Left Trigger →" },
+            {"6","Right Trigger →" },
+    };
+
         public static Dictionary<string, string> GetButtonsForPlatform(RuntimePlatform runtimePlatform)
         {
             Dictionary<string, string> buttonMapStrings;

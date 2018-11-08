@@ -24,6 +24,7 @@ namespace Potesta.Serialization
 
         public static DeepSerial DeserializeToProperType(DeepSerial deepSerial)
         {
+            if(deepSerial == null) { return null; }
             if (deepSerial.GetType() != deepSerial.DerivedClassType)
             {
                 return (DeepSerial)JsonUtility.FromJson(deepSerial.serials, deepSerial.DerivedClassType);

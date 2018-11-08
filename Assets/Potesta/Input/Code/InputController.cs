@@ -12,8 +12,8 @@ namespace Potesta.FlexInput
         public bool Gamepad { get { return gamepad; } private set { gamepad = value; } }
         [SerializeField]
         private bool gamepad = true;
-        public int ControllerNumber { get { return controllerNumber; } /*TODO make this set private by moving controllerdisconnect logic in this class*/set { controllerNumber = value; } }
-        private int controllerNumber = 10;
+        public int RawControllerNumber { get { return rawControllerNumber; } /*TODO make this set private by moving controllerdisconnect logic in this class*/set { rawControllerNumber = value; } }
+        private int rawControllerNumber = 10;
         public bool IsSerial { get { return isSerial; } private set { isSerial = value; } }
         private bool isSerial;
         [NonSerialized]
@@ -138,7 +138,7 @@ namespace Potesta.FlexInput
         /// </summary>
         public void DisconnectController()
         {
-            ControllerNumber = 10;
+            RawControllerNumber = 10;
             InitializeControls();
         }
 

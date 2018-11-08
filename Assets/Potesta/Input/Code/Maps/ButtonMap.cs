@@ -54,7 +54,7 @@ namespace Potesta.FlexInput
             int buttonNum;
             if (int.TryParse(ButtonMapName, out buttonNum))
             {
-                ButtonString = Input.GetJoyButtonString(controller.ControllerNumber, buttonNum);
+                ButtonString = Input.GetJoyButtonString(controller.RawControllerNumber, buttonNum);
             }
             else
             {
@@ -177,7 +177,7 @@ namespace Potesta.FlexInput
 
         public override string ToString()
         {
-            if ((!Application.isPlaying ? false : Input.GetJoystickNames().Length > controller.ControllerNumber) && Input.GetJoystickNames()[controller.ControllerNumber].ToLower().Contains("box"))
+            if ((!Application.isPlaying ? false : Input.GetJoystickNames().Length > controller.RawControllerNumber) && Input.GetJoystickNames()[controller.RawControllerNumber].ToLower().Contains("box"))
             {
                 return Input.JoyButtonNumToXboxControllerMap(MapMessage);
             }

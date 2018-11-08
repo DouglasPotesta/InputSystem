@@ -189,6 +189,36 @@ namespace Potesta
                 }
             });
         }
+
+        private static bool hasStartedBuilding;
+        public static Action BuildingStopped;
+        [RunOnPreProcessBuild(-100)] // TODO Convert this to an attribute.
+        private static void BuildCheckInit() {
+            hasStartedBuilding = BuildPipeline.isBuildingPlayer;
+            EditorApplication.update += BuildCheck;
+        }
+        private static void BuildCheck()
+        {
+            if (BuildPipeline.isBuildingPlayer)
+            {
+                if (!hasStartedBuilding)
+                {
+                    hasStartedBuilding = true;
+                }
+            }
+            else if (hasStartedBuilding)
+            {
+                if (BuildingStopped != null)
+                {
+                    BuildingStopped();
+                }
+                Debug.Log("Buildng has ended thank you");
+                EditorApplication.update -= BuildCheck;
+                hasStartedBuilding = false;
+            }
+            
+        }
+
         public void OnActiveBuildTargetChanged(BuildTarget previousTarget, BuildTarget newTarget)
         {
             ActiveBuildTargetChanged(previousTarget, newTarget);
