@@ -21,8 +21,10 @@ namespace Potesta
         public const string SCENE_NAME = "GameInitializationScene";
         protected static GameInitializer singleton;
         internal static System.Action OnUpdate;
+#pragma warning disable 414, 649
         internal static System.Action OnFixedUpdate;
         internal static System.Action OnGUIUpdate;
+#pragma warning restore 414, 649
         [SerializeField]
         protected List<UnityEngine.Object> Assets = new List<Object>();
 
@@ -48,9 +50,15 @@ namespace Potesta
                 singleton = value;
             }
         }
+/*
+ *  TODO: Set this up so that it is no longer dependent on serializing references in to a scene.
+ *      Then ditch the scene loading for an environment that exists independent of scenes.
+ * 
+ * 
+ * 
+ */
 
-
-
+            public static bool HasInitialized { get { return singleton != null; } }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         protected static void InitializeGame()

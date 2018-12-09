@@ -1,20 +1,20 @@
-﻿using UnityEngine;
+﻿#if FLEXINPUT
+
+using UnityEngine;
 using System;
 using System.Linq;
 using System.Reflection;
 using Potesta.Serialization;
+using System.Collections.Generic;
+
 namespace Potesta.FlexInput
 {
     [System.Serializable]
     public class InputController : DeepSerial
     {
-        public ControllerStatus controllerStatus;
-        public bool Gamepad { get { return gamepad; } private set { gamepad = value; } }
         [SerializeField]
         private bool gamepad = true;
-        public int RawControllerNumber { get { return rawControllerNumber; } /*TODO make this set private by moving controllerdisconnect logic in this class*/set { rawControllerNumber = value; } }
         private int rawControllerNumber = 10;
-        public bool IsSerial { get { return isSerial; } private set { isSerial = value; } }
         private bool isSerial;
         [NonSerialized]
         private ButtonMap[] buttonMaps;
@@ -25,7 +25,7 @@ namespace Potesta.FlexInput
         [NonSerialized]
         private InputMap[] inputMaps;
 
-        private FieldInfo[] InputFields { get { if (inputFields == null) { inputFields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).Where(x => x.FieldType.IsSubclassOf(typeof(InputMap))).OrderBy(y => y.Name).ToArray(); } return inputFields; } }
+        private FieldInfo[] InputFields { get { if (inputFields == null) { inputFields = GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).Where(x => x.FieldType.IsSubclassOf(typeof(InputMap))).ToArray(); } return inputFields; } }
         private FieldInfo[] inputFields;
         private FieldInfo[] ButtonFields { get { if (buttonFields == null) { buttonFields = InputFields.Where(x => x.FieldType == typeof(ButtonMap)).ToArray(); } return buttonFields; } }
         private FieldInfo[] buttonFields;
@@ -33,6 +33,44 @@ namespace Potesta.FlexInput
         private FieldInfo[] axisFields;
         private FieldInfo[] DualAxisFields { get { if (dualAxisFields == null) { dualAxisFields = InputFields.Where(x => x.FieldType == typeof(DualAxisMap)).ToArray(); } return dualAxisFields; } }
         private FieldInfo[] dualAxisFields;
+
+        private Dictionary<string, Func<float, float>> AxisCalibrations = new Dictionary<string, Func<float, float>>();
+
+        private string message;
+
+        public string Message
+        {
+            get
+            {
+                return message;
+            }
+
+            private set
+            {
+                message = value;
+            }
+        }
+
+        /// <summary>
+        /// Whether the controller is connected or not.
+        /// </summary>
+        public ControllerStatus controllerStatus;
+
+        /// <summary>
+        /// Whether this is a Gamepad. If false, it will assume it is a keyboard and mouse scheme.
+        /// </summary>
+        public bool Gamepad { get { return gamepad; } private set { gamepad = value; } }
+
+        /// <summary>
+        /// The raw joystick number unity is using to read values from for this inputController.
+        /// </summary>
+        public int RawControllerNumber { get { return rawControllerNumber; } }
+
+
+        /// <summary>
+        /// Whether this is a live instance of a controller, or a serialized instance. (Generally used for networking).
+        /// </summary>
+        public bool IsSerial { get { return isSerial; } private set { isSerial = value; } }
 
         /// <summary>
         /// Accessor for all button maps on the controller
@@ -122,6 +160,13 @@ namespace Potesta.FlexInput
             }
         }
 
+        
+
+        public InputController()
+        {
+            var x = InputMaps;
+        }
+
         /// <summary>
         /// Initializes input maps for getting their string names.
         /// </summary>
@@ -134,12 +179,31 @@ namespace Potesta.FlexInput
         }
 
         /// <summary>
+        /// A setter for assigning this controller to read inputs from a specific unity joystick number. 
+        /// (ie. the value passed will be used in place of the '#' in internal uses of Input such as"Input.GetButton(joystick#button6);")
+        /// Only use this when an inputController is reading input from the wrong controller.
+        /// Setting this to a value that is already currently being used by another inputController will result in one controller
+        ///     providing input to both inputControllers.
+        /// Note: Setting this to -1 will cause the inputController to read input from all controller.
+        ///         This would be useful if you want everyone's input to affect something.
+        /// </summary>
+        /// <param name="_rawControllerIndex"></param>
+        public void SetRawControllerIndex(int _rawControllerIndex)
+        {
+            rawControllerNumber = _rawControllerIndex;
+            InitializeControls();
+            Input.CheckStatus(this);
+        }
+
+        /// <summary>
         /// Disconnects a players controller.(*Note only works with Gamepads)
         /// </summary>
-        public void DisconnectController()
+        public void Disconnect()
         {
-            RawControllerNumber = 10;
-            InitializeControls();
+            if (gamepad)
+            {
+                Input.DisconnectController(this);
+            }
         }
 
         /// <summary>
@@ -151,6 +215,29 @@ namespace Potesta.FlexInput
             {
                 ButtonMaps[i].Up();
             }
+        }
+
+        public void Calibrate()
+        {
+            MonoBehaviour mb = new GameObject().AddComponent<MonoBehaviour>();
+            mb.gameObject.hideFlags = HideFlags.HideAndDontSave;
+            mb.StartCoroutine(Calibration(mb.gameObject));
+        }
+
+        private System.Collections.IEnumerator Calibration(GameObject go)
+        {
+            Message = "Initializing Calibration.\n\nDo not touch the controller.";
+            yield return new WaitForSecondsRealtime(3); 
+            Message = "!!! CALIBRATING !!!\n\nDo not touch the controller.";
+            // TODO: implement a detect axis that accepts an axis callibration dictionary as a parameter and adjusts values as needed.
+            // TODO: implement a detect all axis function. this will be helpful in generating the dictionary.
+            /* IMPLEMENTATION: have a function for fixing a calibration value of 0.8 or greater, -0.8 or less, and 0.3 or less 
+                    0.8: func should return one minus value. and dead zone it based off how far off from 1 it is on avg.
+                    -0.8: func should take value add one and divide by two, and deadzone value based off how far off crom -1 it is on avg.
+                    0.3: func should floor value if value is less than or equal to avg.
+             */
+            yield return null;
+            GameObject.Destroy(go);
         }
 
         /// <summary>
@@ -175,3 +262,4 @@ namespace Potesta.FlexInput
         }
     }
 }
+#endif

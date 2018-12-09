@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if FLEXINPUT
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Potesta.FlexInput
@@ -36,7 +37,7 @@ namespace Potesta.FlexInput
             {"1","Left Stick ↓↑" },
             {"3","Right Stick ←→" },
             {"4","Right Stick ↓↑" },
-            {"6","D-Pad ↓↑)" },
+            {"6","D-Pad ↓↑" },
             {"5","D-Pad ←→" },
             {"9","Right Trigger →" },
             {"8","Left Trigger →" },
@@ -341,5 +342,43 @@ new Dictionary<string, string>
             }
             return axisMapStrings;
         }
+        private static class FilterType { public const string Unfiltered = "Unfiltered", Xbox_One = "Xbox_One", DualShock = "DualShock"; }
+        public static string[] GetPlatformFilters(RuntimePlatform runtimePlatform)
+        {
+            switch (runtimePlatform)
+            {
+                case RuntimePlatform.OSXEditor:
+                    return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
+                case RuntimePlatform.OSXPlayer:
+                    return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
+                case RuntimePlatform.WindowsPlayer:
+                    return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
+                case RuntimePlatform.WindowsEditor:
+                    return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
+                case RuntimePlatform.LinuxPlayer:
+                    return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
+                case RuntimePlatform.LinuxEditor:
+                    return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
+                case RuntimePlatform.WebGLPlayer:
+                    return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
+                case RuntimePlatform.PSP2:
+                    return new string[] { FilterType.Unfiltered, FilterType.DualShock };
+                case RuntimePlatform.PS4:
+                    return new string[] { FilterType.Unfiltered, FilterType.DualShock };
+                case RuntimePlatform.PSM:
+                    return new string[] { FilterType.Unfiltered, FilterType.DualShock };
+                case RuntimePlatform.XboxOne:
+                    return new string[] { FilterType.Unfiltered, FilterType.Xbox_One };
+                case RuntimePlatform.IPhonePlayer:
+                case RuntimePlatform.Android:
+                case RuntimePlatform.TizenPlayer:
+                case RuntimePlatform.WiiU:
+                case RuntimePlatform.tvOS:
+                case RuntimePlatform.Switch:
+                default:
+                    return new string[] { FilterType.Unfiltered };
+            }
+        }
     }
 }
+#endif

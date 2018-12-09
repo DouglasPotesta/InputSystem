@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if FLEXINPUT
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -31,3 +32,4 @@ namespace Potesta.FlexInput
         }
     }
 }
+#endif

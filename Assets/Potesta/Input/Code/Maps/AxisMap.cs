@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if FLEXINPUT
+using System.Collections;
 using UnityEngine;
 
 namespace Potesta.FlexInput
@@ -123,7 +124,7 @@ namespace Potesta.FlexInput
             return b.controller.IsSerial ? b.serialValue : b.GetRawAxis() * b.AxisMultiplier();
         }
 
-        public float GetRawAxis()
+        public virtual float GetRawAxis()
         {
             float value = 0;
             if (IsVirtual)
@@ -228,3 +229,4 @@ namespace Potesta.FlexInput
         }
     }
 }
+#endif

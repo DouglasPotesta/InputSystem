@@ -14,7 +14,7 @@ namespace Potesta {
 #if UNITY_EDITOR
         [UnityEditor.InitializeOnLoadMethod]
         private static void ConfigureEditorForInitialization()
-        {
+        { 
             UnityEditor.EditorBuildSettingsScene[] sceneSetups = UnityEditor.EditorBuildSettings.scenes;
             if (!sceneSetups.Any(x => x.path.Contains(SCENE_NAME + ".unity")))
             {

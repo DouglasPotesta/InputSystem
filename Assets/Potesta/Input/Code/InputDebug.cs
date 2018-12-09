@@ -1,8 +1,9 @@
 ﻿
-
+#if FLEXINPUT
 #if CONSOLE
 using System;
 using System.Linq;
+using Potesta.Console;
 
 public class InputDebug {
     [ConsoleComand]
@@ -17,4 +18,5 @@ public class InputDebug {
         return String.Join("\n", Input.GetJoystickNames());
     }
 }
+#endif
 #endif

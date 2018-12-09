@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if FLEXINPUT
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Potesta.FlexInput
@@ -67,3 +68,4 @@ namespace Potesta.FlexInput
         }
     }
 }
+#endif

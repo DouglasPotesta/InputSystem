@@ -1,4 +1,5 @@
-﻿using Potesta;
+﻿#if FLEXINPUT
+using Potesta;
 using Potesta.FlexInput;
 using System;
 using System.Collections;
@@ -14,7 +15,7 @@ public class InputEditorWindow : EditorWindow {
 
     public static InputEditorWindow editorWindow;
 
-    [MenuItem("Edit/Project Settings/Input/Defaults")]
+    [MenuItem("Edit/Project Settings/Input/Defaults %i")]
     public static void CreateWindow()
     {
         editorWindow = GetWindow<InputEditorWindow>();
@@ -27,7 +28,6 @@ public class InputEditorWindow : EditorWindow {
 
     public Vector2 scrollPosition = Vector2.zero;
     public Vector2 horizontalScrollPost = Vector2.zero;
-    private int filterType;
 
     public void OnEnable()
     {
@@ -79,7 +79,6 @@ public class InputEditorWindow : EditorWindow {
         EditorGUI.BeginChangeCheck();
         RuntimePlatformTabGUI();
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
-        FilterGUI();
         idGUIS[currentID].OnInspectorGUI();
         Color ogContentColor = GUI.backgroundColor;
         GUI.backgroundColor = new Color(0.8f, 0.4f, 0.4f, 1);
@@ -102,12 +101,7 @@ public class InputEditorWindow : EditorWindow {
         }
     }
 
-    private void FilterGUI()
-    {
-        string[] filterOptions = GetPlatformFilters(currentID.runtimePlatform);
-        filterType = EditorGUILayout.Popup("Filter", filterType, filterOptions);
-        filterType = Mathf.Clamp(filterType, 0, filterOptions.Length);
-    }
+
 
     private void SaveSettings()
     {
@@ -146,43 +140,7 @@ public class InputEditorWindow : EditorWindow {
         EditorGUILayout.EndScrollView();
         EditorGUILayout.EndHorizontal();
     }
-    private static class FilterType { public const string Unfiltered = "Unfiltered", Xbox_One="Xbox_One", DualShock= "DualShock"; }
-    private string[] GetPlatformFilters(RuntimePlatform runtimePlatform)
-    {
-        switch (runtimePlatform)
-        {
-            case RuntimePlatform.OSXEditor:
-                return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
-            case RuntimePlatform.OSXPlayer:
-                return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
-            case RuntimePlatform.WindowsPlayer:
-                return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
-            case RuntimePlatform.WindowsEditor:
-                return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
-            case RuntimePlatform.LinuxPlayer:
-                return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
-            case RuntimePlatform.LinuxEditor:
-                return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock };
-            case RuntimePlatform.WebGLPlayer:
-                return new string[] { FilterType.Unfiltered, FilterType.Xbox_One, FilterType.DualShock};
-            case RuntimePlatform.PSP2:
-                return new string[] { FilterType.Unfiltered, FilterType.DualShock};
-            case RuntimePlatform.PS4:
-                return new string[] { FilterType.Unfiltered, FilterType.DualShock};
-            case RuntimePlatform.PSM:
-                return new string[] { FilterType.Unfiltered, FilterType.DualShock};
-            case RuntimePlatform.XboxOne:
-                return new string[] { FilterType.Unfiltered, FilterType.Xbox_One};
-            case RuntimePlatform.IPhonePlayer:
-            case RuntimePlatform.Android:
-            case RuntimePlatform.TizenPlayer:
-            case RuntimePlatform.WiiU:
-            case RuntimePlatform.tvOS:
-            case RuntimePlatform.Switch:
-            default:
-                return new string[] { FilterType.Unfiltered};
-        }
-    }
+
 }
 public class UnitySave : UnityEditor.AssetModificationProcessor
 {
@@ -194,3 +152,4 @@ public class UnitySave : UnityEditor.AssetModificationProcessor
         return paths;
     }
 }
+#endif

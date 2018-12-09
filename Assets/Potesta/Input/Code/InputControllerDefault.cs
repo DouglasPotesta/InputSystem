@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if FLEXINPUT
+using System;
 using UnityEngine;
 using Potesta.Serialization;
 namespace Potesta.FlexInput
@@ -25,3 +26,4 @@ namespace Potesta.FlexInput
         }
     }
 }
+#endif

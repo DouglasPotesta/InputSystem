@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if FLEXINPUT
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System;
@@ -26,6 +27,7 @@ namespace Potesta.FlexInput
 
         private List<Type> inputControllerClasses;
         public InputControllerDefault target;
+        private bool filterForPlatform = true;
 
         private List<Type> ICCS
         {
@@ -78,6 +80,7 @@ namespace Potesta.FlexInput
         {
             InputControllerDefault targ = (InputControllerDefault)target;
             EditorGUI.BeginChangeCheck();
+            FilterGUI();
             Type controllerSelection = ICCS[EditorGUILayout.Popup("Controller Class", ICCS.IndexOf(targ.InputControllerType), ICCS.Select(x => x.FullName).ToArray())];
             if (EditorGUI.EndChangeCheck())
             {
@@ -87,6 +90,10 @@ namespace Potesta.FlexInput
             }
             PlatformDefaultsGUI(targ);
 
+        }
+        private void FilterGUI()
+        {
+            filterForPlatform = EditorGUILayout.Toggle("Filter", filterForPlatform);
         }
         public void ClassSelectionGUI()
         {
@@ -169,8 +176,8 @@ namespace Potesta.FlexInput
                     EditorUtility.SetDirty(target);
                 }
             }
-
-            Dictionary<string, string> joyAxes = axisMap.IsVirtual ? JoyPlatformMaps.GetButtonsForPlatform(newRuntimePlatform) : JoyPlatformMaps.GetAxisForPlatform(newRuntimePlatform);
+            RuntimePlatform filter = filterForPlatform ?newRuntimePlatform: RuntimePlatform.PS4;
+            Dictionary<string, string> joyAxes = axisMap.IsVirtual ? JoyPlatformMaps.GetButtonsForPlatform(filter) : JoyPlatformMaps.GetAxisForPlatform(filter);
             joyAxes.Add("", "Not Active");
             string[] joyAxisArrayNames = joyAxes.Select(x => x.Key + "  |  " + x.Value).OrderBy(x => x).ToArray();
             EditorGUI.indentLevel = baseIndentLevel + 1;
@@ -219,7 +226,8 @@ namespace Potesta.FlexInput
 
         public void ButtonMapsGUI(ButtonMap buttonMap, RuntimePlatform runtimePlatform)
         {
-            Dictionary<string, string> joyButtons = JoyPlatformMaps.GetButtonsForPlatform(runtimePlatform);
+            RuntimePlatform filter = filterForPlatform ? runtimePlatform : RuntimePlatform.PS4;
+            Dictionary<string, string> joyButtons = JoyPlatformMaps.GetButtonsForPlatform(filter);
             string[] joyButtonArrayNames = joyButtons.Select(x => x.Key + "  |  " + x.Value).OrderBy(x => x).ToArray();
             EditorGUI.BeginChangeCheck();
             int newBut = EditorGUILayout.Popup(joyButtons.Keys.OrderBy(x => x).ToList().IndexOf(buttonMap.ButtonMapData.buttonMapName), joyButtonArrayNames);
@@ -235,3 +243,4 @@ namespace Potesta.FlexInput
         }
     }
 }
+#endif

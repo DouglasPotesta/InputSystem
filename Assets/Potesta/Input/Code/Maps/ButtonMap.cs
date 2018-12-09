@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if FLEXINPUT
+using System.Collections;
 using UnityEngine;
 namespace Potesta.FlexInput
 {
@@ -36,7 +37,7 @@ namespace Potesta.FlexInput
             buttonMapData = _buttonMapData;
             if (buttonMapData.buttonMapName == null) { buttonMapData.buttonMapName = "empty"; }
             MapMessage = ButtonMapName;
-            if (Application.isPlaying)
+            if (GameInitializer.HasInitialized)
             {
                 UpdateButtonString();
             }
@@ -73,7 +74,7 @@ namespace Potesta.FlexInput
             return RawUp();
         }
 
-        private bool RawUp()
+        public virtual bool RawUp()
         {
             return UnityEngine.Input.GetKeyUp(ButtonString);
         }
@@ -86,15 +87,15 @@ namespace Potesta.FlexInput
                 return b.fixed_Val;
             }
             if (IsTestingForInput) return false;
-            return RawValue(b);
+            return b.RawValue();
         }
 
-        private static bool RawValue(ButtonMap b)
+        public virtual bool RawValue()
         {
-            return UnityEngine.Input.GetKey(b.ButtonString);
+            return UnityEngine.Input.GetKey(ButtonString);
         }
 
-        public bool Down()
+        public virtual bool Down()
         {
             if (controller.IsSerial) { return fixed_DOWN; }
             if (CheckForFixedUpdate())
@@ -138,7 +139,7 @@ namespace Potesta.FlexInput
                     lastUpdate = Time.frameCount;
                     fixed_UP |= RawUp();
                     fixed_DOWN |= RawDown();
-                    fixed_Val |= RawValue(this);
+                    fixed_Val |= RawValue();
 
                 }
                 else
@@ -146,7 +147,7 @@ namespace Potesta.FlexInput
                     lastUpdate = Time.frameCount;
                     fixed_UP = RawUp();
                     fixed_DOWN = RawDown();
-                    fixed_Val = RawValue(this);
+                    fixed_Val = RawValue();
                 }
             }
             return true;
@@ -195,3 +196,4 @@ namespace Potesta.FlexInput
         }
     }
 }
+#endif

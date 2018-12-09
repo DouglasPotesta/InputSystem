@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#if FLEXINPUT
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -23,3 +24,4 @@ public partial class Input
     }
 #endif
 }
+#endif

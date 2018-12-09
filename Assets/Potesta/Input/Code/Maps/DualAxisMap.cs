@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if FLEXINPUT
+using System.Collections;
 using UnityEngine;
 
 namespace Potesta.FlexInput
@@ -49,9 +50,19 @@ namespace Potesta.FlexInput
             return b.controller.IsSerial ? b.serialValue : new Vector2(b.xAxisMap, b.yAxisMap);
         }
 
+        public virtual Vector2 RawValue()
+        {
+            return new Vector2(xAxisMap, yAxisMap);
+        }
+
         public static implicit operator float(DualAxisMap b)
         {
-            return ((Vector2)b).magnitude;
+            return b.RawMagnitude();
+        }
+
+        public virtual float RawMagnitude()
+        {
+            return RawValue().magnitude;
         }
 
         public override IEnumerator TestForInput()
@@ -73,11 +84,11 @@ namespace Potesta.FlexInput
             }
         }
 
-
         public override string ToString()
         {
             return "X Axis: " + xAxisMap.ToString() + "\nY Axis: " + yAxisMap.ToString();
         }
+
         public override void SerializeValues()
         {
             xAxisMap.SerializeValues();
@@ -85,3 +96,4 @@ namespace Potesta.FlexInput
         }
     }
 }
+#endif

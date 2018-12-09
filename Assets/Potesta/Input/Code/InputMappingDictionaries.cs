@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿#if FLEXINPUT
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public partial class Input 
 {
@@ -184,4 +186,6 @@ public partial class Input
         }
         return buttonNum;
     }
+
 }
+#endif

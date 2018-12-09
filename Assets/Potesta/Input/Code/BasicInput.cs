@@ -1,4 +1,5 @@
-﻿
+﻿#if FLEXINPUT
+
 namespace Potesta.FlexInput
 {
     [System.Serializable]
@@ -18,5 +19,7 @@ namespace Potesta.FlexInput
         public AxisMap UseSecondary;
         public DualAxisMap Movement;
         public DualAxisMap Look;
+        public DualAxisMap DPad;
     }
 }
+#endif

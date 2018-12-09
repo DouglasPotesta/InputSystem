@@ -12,5 +12,5 @@ EditorBuildSettings:
     path: Assets/Potesta/Input/Scenes/ExampleTestInput.unity
     guid: 563361a9d31a9514b8c7c63fd140cc4f
   - enabled: 1
-    path: Assets/Potesta/GameInitialize/Scenes/GameInitializationScene.unity
+    path: Assets/Potesta/GameInitializer/Scenes/GameInitializationScene.unity
     guid: 9d5ffc0b12b5ddd48a49b2b482b19199
