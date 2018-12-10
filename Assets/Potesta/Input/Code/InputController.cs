@@ -34,7 +34,12 @@ namespace Potesta.FlexInput
         private FieldInfo[] DualAxisFields { get { if (dualAxisFields == null) { dualAxisFields = InputFields.Where(x => x.FieldType == typeof(DualAxisMap)).ToArray(); } return dualAxisFields; } }
         private FieldInfo[] dualAxisFields;
 
-        private Dictionary<string, Func<float, float>> AxisCalibrations = new Dictionary<string, Func<float, float>>();
+        private Dictionary<string, Func<float, float>> axisCalibrations = new Dictionary<string, Func<float, float>>();
+
+        public Dictionary<string, Func<float, float>> AxisCalibrations {
+            get { if (axisCalibrations == null) { axisCalibrations = new Dictionary<string, Func<float, float>>(); } return axisCalibrations; }
+            private set { axisCalibrations = value; } }
+
 
         private string message;
 
@@ -216,10 +221,10 @@ namespace Potesta.FlexInput
                 ButtonMaps[i].Up();
             }
         }
-
+        private class MB : MonoBehaviour { }
         public void Calibrate()
         {
-            MonoBehaviour mb = new GameObject().AddComponent<MonoBehaviour>();
+            MB mb = new GameObject().AddComponent<MB>();
             mb.gameObject.hideFlags = HideFlags.HideAndDontSave;
             mb.StartCoroutine(Calibration(mb.gameObject));
         }
@@ -232,13 +237,51 @@ namespace Potesta.FlexInput
             // TODO: implement a detect axis that accepts an axis callibration dictionary as a parameter and adjusts values as needed.
             // TODO: implement a detect all axis function. this will be helpful in generating the dictionary.
             /* IMPLEMENTATION: have a function for fixing a calibration value of 0.8 or greater, -0.8 or less, and 0.3 or less 
-                    0.8: func should return one minus value. and dead zone it based off how far off from 1 it is on avg.
-                    -0.8: func should take value add one and divide by two, and deadzone value based off how far off crom -1 it is on avg.
-                    0.3: func should floor value if value is less than or equal to avg.
+                    ✔0.8: func should return one minus value. and dead zone it based off how far off from 1 it is on avg.
+                    ✔-0.8: func should take value add one and divide by two, and deadzone value based off how far off crom -1 it is on avg.
+                    ✔0.3: func should floor value if value is less than or equal to avg.
              */
+
+            if (!Input.IsTestingForInput)
+            {
+
+                string Message = "Please Wait";
+                yield return new WaitForSeconds(3);
+                float realStartTime = Time.realtimeSinceStartup;
+                float timePassed = 0;
+                AxisCalibrations.Clear();
+                while (timePassed < 3)
+                {
+                    Debug.Log("Do not touch the controller.\nCalibrating..."+((int)(3.5 - timePassed)).ToString());
+                    float value;
+                    string axisString = Input.DetectRawAxes(this, out value, AxisCalibrations.Keys.ToArray());
+                    if (!AxisCalibrations.ContainsKey(axisString)&& !string.IsNullOrEmpty(axisString))
+                    {
+                        if (value >= 0.8f)
+                        {
+                            AxisCalibrations.Add(axisString,  OneMinus);
+                        }
+                        else if (value <= -0.8f)
+                        {
+                            AxisCalibrations.Add(axisString, Add1DivedBy2);
+                        }
+                        else if (value <= 0.3f)
+                        {
+                            AxisCalibrations.Add(axisString, DeadZone);
+                        }
+                    }
+                    timePassed = Time.realtimeSinceStartup - realStartTime;
+                    yield return null;
+                }
+            }
+
+
             yield return null;
             GameObject.Destroy(go);
         }
+        private static float Add1DivedBy2(float value) { return ((value + 1) / 2); }
+        private static float OneMinus(float value) { return (1 - value); }
+        private static float DeadZone(float value) { return (Mathf.Floor(value * 5) / 5); }
 
         /// <summary>
         /// Used for freezing a controller input state when serializing and sending a controller state with an rpc.

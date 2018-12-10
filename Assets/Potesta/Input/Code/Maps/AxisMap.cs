@@ -1,4 +1,5 @@
 ﻿#if FLEXINPUT
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -41,8 +42,10 @@ namespace Potesta.FlexInput
 
         private float serialValue = 0;
 
-        private string PostiveAxisString = "";
+        private string PositiveAxisString = "";
         private string NegativeAxisString = "";
+        private Func<float, float> PositiveAxisModifier = (float rawValue)=> {return rawValue; };
+        private Func<float, float> NegativeAxisModifier = (float rawValue)=> { return rawValue; };
 
         public AxisMap(AxisMapData _axisMapData, InputController _inputController) : base(_inputController)
         {
@@ -70,11 +73,11 @@ namespace Potesta.FlexInput
                 int buttonNum;
                 if (int.TryParse(PositiveAxisName, out buttonNum))
                 {
-                    PostiveAxisString = Input.GetJoyButtonString(controller.RawControllerNumber, buttonNum);
+                    PositiveAxisString = Input.GetJoyButtonString(controller.RawControllerNumber, buttonNum);
                 }
                 else
                 {
-                    PostiveAxisString = PositiveAxisName;
+                    PositiveAxisString = PositiveAxisName;
                 }
                 if (NegativeAxisName != null)
                 {
@@ -93,12 +96,13 @@ namespace Potesta.FlexInput
                 int buttonNum;
                 if (int.TryParse(PositiveAxisName, out buttonNum))
                 {
-                    PostiveAxisString = Input.GetJoyAxisString(controller.RawControllerNumber, buttonNum);
+                    PositiveAxisString = Input.GetJoyAxisString(controller.RawControllerNumber, buttonNum);
                 }
                 else
                 {
-                    PostiveAxisString = PositiveAxisName;
+                    PositiveAxisString = PositiveAxisName;
                 }
+                PositiveAxisModifier = controller.AxisCalibrations.ContainsKey(PositiveAxisName) ? controller.AxisCalibrations[PositiveAxisName] : SameValue; 
                 if (NegativeAxisName != null)
                 {
                     if (int.TryParse(NegativeAxisName, out buttonNum))
@@ -110,6 +114,7 @@ namespace Potesta.FlexInput
                         NegativeAxisString = NegativeAxisName;
                     }
                 }
+                NegativeAxisModifier = controller.AxisCalibrations.ContainsKey(NegativeAxisName) ? controller.AxisCalibrations[NegativeAxisName] : SameValue;
             }
         }
 
@@ -129,17 +134,17 @@ namespace Potesta.FlexInput
             float value = 0;
             if (IsVirtual)
             {
-                value += UnityEngine.Input.GetKey(PostiveAxisString) ? 1 : 0;
+                value += UnityEngine.Input.GetKey(PositiveAxisString) ? 1 : 0;
                 if (NegativeAxisName != null)
                 {
                     value += UnityEngine.Input.GetKey(NegativeAxisString) ? -1 : 0;
                 }
                 return value;
             }
-            value += UnityEngine.Input.GetAxis(PostiveAxisString) * PositiveDir;
+            value += PositiveAxisModifier(UnityEngine.Input.GetAxis(PositiveAxisString)) * PositiveDir;
             if (NegativeAxisName != null)
             {
-                value += UnityEngine.Input.GetAxis(NegativeAxisString) * NegativeDir;
+                value += NegativeAxisModifier(UnityEngine.Input.GetAxis(NegativeAxisString)) * NegativeDir;
             }
             return value;
         }
@@ -226,6 +231,11 @@ namespace Potesta.FlexInput
         public override void SerializeValues()
         {
             serialValue = this;
+        }
+
+        private static float SameValue(float value)
+        {
+            return value;
         }
     }
 }

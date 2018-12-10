@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UInput = UnityEngine.Input;
 using Potesta;
 using Potesta.FlexInput;
+using System.Collections.Specialized;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -256,6 +257,56 @@ public partial class Input
         }
         return DetectAxes(out axisValue, requirements, restrictions);
     }
+
+    public static string DetectRawAxes(InputController _inputController, out float axisValue, params string[] axesToIgnore)
+    {
+        string[] restrictions = new string[0];
+        string[] requirements = new string[0];
+        if (_inputController.Gamepad)
+        {
+            requirements = new string[] { ("joy_" + _inputController.RawControllerNumber.ToString() + "_axis_") };
+        }
+        else
+        {
+            restrictions = new string[] { ("joy_") }.Concat(axesToIgnore).ToArray();
+        }
+        return DetectRawAxes(out axisValue, requirements, restrictions);
+    }
+
+    public static string DetectRawAxes(out float axisValue, string[] required, params string[] restrictions)
+    {
+        int length = axesNames.Length;
+        KeyValuePair<string, float> highestValueAxis = new KeyValuePair<string, float>("", 0);
+        int joystickCount = JoystickCount;
+        axisValue = 0;
+
+        for (int i = 0; i < length; i++)
+        {
+            if (axesNames[i].Contains("joy_"))
+            {
+                string[] splitName = axesNames[i].Split('_');
+                int joyNum;
+                if (int.TryParse(splitName[1], out joyNum) && joyNum > joystickCount)
+                {
+                    break;
+                }
+            }
+            if (!restrictions.Any(x => axesNames[i].Contains(x)) && required.All(y => axesNames[i].Contains(y)))
+            {
+                axisValue = UInput.GetAxis(axesNames[i]);
+                float magnitudeOfAxis = Mathf.Abs(UInput.GetAxis(axesNames[i]));
+                if (magnitudeOfAxis > Mathf.Abs(highestValueAxis.Value) && magnitudeOfAxis > 0)
+                {
+                    highestValueAxis = new KeyValuePair<string, float>(axesNames[i], axisValue);
+                }
+            }
+        }
+        axisValue = highestValueAxis.Value;
+        string finalAxisString = highestValueAxis.Key;
+        for (int ii = 0; ii < required.Length; ii++) { finalAxisString = finalAxisString.Replace(required[ii], ""); }
+        return finalAxisString.ToLower();
+    }
+
     /// <summary>
     /// Detect which Axis is actively returning a value for the specified inputController.
     /// </summary>

@@ -56,6 +56,11 @@ namespace Potesta.FlexInput
             return inputAssignmentField;
         }
 
+        public void CalibrateController()
+        {
+            Controller.Calibrate();
+        }
+
         public void SaveSettings()
         {
             Input.SaveSettings();
