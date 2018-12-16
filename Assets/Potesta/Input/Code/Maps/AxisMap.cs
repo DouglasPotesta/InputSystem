@@ -37,10 +37,25 @@ namespace Potesta.FlexInput
         private float NegativeDir { get { return axisMapData.isNegativeAxisInverted ? -1 : 1; } }
         public int Sensitivity { get { return axisMapData.sensitivity; } set { axisMapData.sensitivity = value; } }
         public AxisMapData AxisMapData { get { return axisMapData; } }
+
+        public float DeltaValue
+        {
+            get
+            {
+                return deltaValue;
+            }
+
+            private set
+            {
+                deltaValue = value;
+            }
+        }
+
         [SerializeField]
         private AxisMapData axisMapData;
 
         private float serialValue = 0;
+        private float deltaValue = 0;
 
         private string PositiveAxisString = "";
         private string NegativeAxisString = "";
@@ -149,6 +164,11 @@ namespace Potesta.FlexInput
             return value;
         }
 
+        public float ExtrapolatedValue(int tTicksAhead)
+        {
+            return Mathf.Clamp01(DeltaValue * tTicksAhead + serialValue);
+        }
+
         public override IEnumerator TestForInput()
         {
             if (!IsTestingForInput)
@@ -228,8 +248,12 @@ namespace Potesta.FlexInput
             return MapMessage;
         }
 
+        /// <summary>
+        /// Assumes serialized every tick
+        /// </summary>
         public override void SerializeValues()
         {
+            DeltaValue = this - serialValue;
             serialValue = this;
         }
 

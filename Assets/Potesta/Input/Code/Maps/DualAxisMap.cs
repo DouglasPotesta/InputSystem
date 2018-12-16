@@ -27,7 +27,26 @@ namespace Potesta.FlexInput
         private DualAxisMapData dualAxisMapData;
         public float x { get { return ((Vector2)this).x; } }
         public float y { get { return ((Vector2)this).y; } }
-        private Vector2 serialValue { get { return new Vector2(xAxisMap, yAxisMap); } }
+
+        [SerializeField]
+        private Vector2 serialValue = Vector2.zero;
+        public Vector2 SerialValue { get { return serialValue;}private set { serialValue = value; } }
+
+        [SerializeField]
+        private Vector2 deltaValue = Vector2.zero;
+        public Vector2 DeltaValue
+        {
+            get
+            {
+                return deltaValue;
+            }
+
+            private set
+            {
+                deltaValue = value;
+            }
+        }
+
 
         public DualAxisMap(DualAxisMapData _dualAxisMapData, InputController _inputController) : base(_inputController)
         {
@@ -47,12 +66,12 @@ namespace Potesta.FlexInput
 
         public static explicit operator Vector2(DualAxisMap b)
         {
-            return b.controller.IsSerial ? b.serialValue : new Vector2(b.xAxisMap, b.yAxisMap);
+            return b.RawValue();
         }
 
         public virtual Vector2 RawValue()
         {
-            return new Vector2(xAxisMap, yAxisMap);
+            return controller.IsSerial ? SerialValue : new Vector2(xAxisMap, yAxisMap);
         }
 
         public static implicit operator float(DualAxisMap b)
@@ -63,6 +82,11 @@ namespace Potesta.FlexInput
         public virtual float RawMagnitude()
         {
             return RawValue().magnitude;
+        }
+
+        public Vector2 ExtrapolatedValue(int tTicksAhead)
+        {
+            return Vector2.ClampMagnitude(Vector3.SlerpUnclamped(Vector2.ClampMagnitude(SerialValue - DeltaValue,1),Vector2.ClampMagnitude(SerialValue,1), 1 + tTicksAhead),(Mathf.Clamp01 (Mathf.LerpUnclamped((SerialValue-DeltaValue).magnitude,SerialValue.magnitude,1+tTicksAhead))));
         }
 
         public override IEnumerator TestForInput()
@@ -91,6 +115,9 @@ namespace Potesta.FlexInput
 
         public override void SerializeValues()
         {
+            Vector2 rawValue = (Vector2)this;
+            DeltaValue = rawValue - SerialValue;
+            SerialValue = rawValue;
             xAxisMap.SerializeValues();
             yAxisMap.SerializeValues();
         }

@@ -23,14 +23,19 @@ namespace Potesta.FlexInput
         private string ButtonString = "";
 
         // FixedUpdate Checking
+        [SerializeField]
         private bool fixed_UP = false;
+        [SerializeField]
         private bool fixed_DOWN = false;
+        [SerializeField]
         private bool fixed_Val = false;
 
         private float currentFixedUpdateInterval = 0;
         private int latestUpdateRead = 0;
         private int lastUpdate = 0;
-
+        [SerializeField]
+        private int ticksUnchanged = 0;
+        private int framesUnchanged = 0;
 
         public ButtonMap(ButtonMapData _buttonMapData, InputController _config) : base(_config)
         {
@@ -134,23 +139,50 @@ namespace Potesta.FlexInput
             }
             else if (lastUpdate != Time.frameCount)
             {
-                if (lastUpdate > latestUpdateRead && currentFixedUpdateInterval == Time.fixedTime)
+                bool rawUp = RawUp();
+                bool rawDown = RawDown();
+                bool rawValue = RawValue();
+                if (lastUpdate > latestUpdateRead && currentFixedUpdateInterval == Time.fixedTime) // the subsequent extra frames between ticks
                 {
+                    if (rawValue == fixed_Val)
+                    {// Only the framesUnchanged gets ticked because the this section represents extra frames between ticks.
+                        framesUnchanged += 1;
+                    }
+                    else
+                    {// if it was changed between ticks then ticks unchanged still needs to be reset to 0.
+                        framesUnchanged = 0;
+                        ticksUnchanged = 0;
+                    }
                     lastUpdate = Time.frameCount;
-                    fixed_UP |= RawUp();
-                    fixed_DOWN |= RawDown();
-                    fixed_Val |= RawValue();
+                    fixed_UP |= rawUp;
+                    fixed_DOWN |= rawDown;
+                    fixed_Val |= rawValue;
 
                 }
                 else
-                {
+                { // the first frame before a tick.
+                    if(rawValue == fixed_Val)
+                    {
+                        ticksUnchanged += 1;
+                        framesUnchanged += 1;
+                    }
+                    else
+                    {
+                        framesUnchanged = 0;
+                        ticksUnchanged = 0;
+                    }
                     lastUpdate = Time.frameCount;
-                    fixed_UP = RawUp();
-                    fixed_DOWN = RawDown();
-                    fixed_Val = RawValue();
+                    fixed_UP = rawUp;
+                    fixed_DOWN = rawDown;
+                    fixed_Val = rawValue;
                 }
             }
             return true;
+        }
+
+        public bool ExtrapolatedValue(int tframesAhead)
+        {
+            return fixed_Val;
         }
 
         public override IEnumerator TestForInput()
