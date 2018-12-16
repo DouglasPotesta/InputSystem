@@ -185,6 +185,12 @@ public partial class Input
     {
         return (T)Num[(int)controllerNum];
     }
+
+    public static int ControllerNum(InputController controller)
+    {
+        return Num.Contains(controller) ? Num.ToList().IndexOf(controller) : -1;
+    }
+
     /// <summary>
     /// Checks the connection status of the specified controller.
     /// </summary>

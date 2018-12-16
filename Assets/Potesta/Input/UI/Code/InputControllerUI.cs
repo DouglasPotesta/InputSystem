@@ -12,6 +12,8 @@ namespace Potesta.FlexInput
         public InputAssignmentField inputInterfaceUIPrefab;
         private List<InputAssignmentField> inputAssignmentFields = new List<InputAssignmentField>();
         public InputController Controller { get { return Input.GetController(ControllerNum); } }
+        public UnityEngine.UI.Text UITextField;
+
 
         void Start()
         {
@@ -45,6 +47,7 @@ namespace Potesta.FlexInput
             if (Input.GetKeyDown(KeyCode.Alpha1)) { ControllerNum = 1; }
             if (Input.GetKeyDown(KeyCode.Alpha2)) { ControllerNum = 2; }
             if (Input.GetKeyDown(KeyCode.Alpha3)) { ControllerNum = 3; }
+            UITextField.text = Controller.Message;
         }
 
         private InputAssignmentField CreateInputInterface(InputMap fieldInfo)

@@ -47,6 +47,7 @@ namespace Potesta.FlexInput
         {
             get
             {
+                if(string.IsNullOrEmpty(message)) { message = "Controller " + (Input.ControllerNum(this)+1).ToString(); }
                 return message;
             }
 
@@ -245,14 +246,14 @@ namespace Potesta.FlexInput
             if (!Input.IsTestingForInput)
             {
 
-                string Message = "Please Wait";
+                Message = "Please Wait";
                 yield return new WaitForSeconds(3);
                 float realStartTime = Time.realtimeSinceStartup;
                 float timePassed = 0;
                 AxisCalibrations.Clear();
                 while (timePassed < 3)
                 {
-                    Debug.Log("Do not touch the controller.\nCalibrating..."+((int)(3.5 - timePassed)).ToString());
+                    Message = ("Do not touch the controller.\nCalibrating..."+((int)(3.5 - timePassed)).ToString());
                     float value;
                     string axisString = Input.DetectRawAxes(this, out value, AxisCalibrations.Keys.ToArray());
                     if (!AxisCalibrations.ContainsKey(axisString)&& !string.IsNullOrEmpty(axisString))
@@ -274,8 +275,9 @@ namespace Potesta.FlexInput
                     yield return null;
                 }
             }
-
-
+                Message = "Completed Calibration.";
+            yield return new WaitForSeconds(3);
+            Message = "Controller " + Input.ControllerNum(this).ToString();
             yield return null;
             GameObject.Destroy(go);
         }

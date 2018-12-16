@@ -156,7 +156,7 @@ namespace Potesta.FlexInput
                     lastUpdate = Time.frameCount;
                     fixed_UP |= rawUp;
                     fixed_DOWN |= rawDown;
-                    fixed_Val |= rawValue;
+                    fixed_Val = rawValue;
 
                 }
                 else

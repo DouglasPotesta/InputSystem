@@ -29,11 +29,11 @@ namespace Potesta.FlexInput
         public float y { get { return ((Vector2)this).y; } }
 
         [SerializeField]
-        private Vector2 serialValue = Vector2.zero;
+        private  SerializableVector3 serialValue = Vector3.zero;
         public Vector2 SerialValue { get { return serialValue;}private set { serialValue = value; } }
 
         [SerializeField]
-        private Vector2 deltaValue = Vector2.zero;
+        private SerializableVector3 deltaValue = Vector3.zero;
         public Vector2 DeltaValue
         {
             get
