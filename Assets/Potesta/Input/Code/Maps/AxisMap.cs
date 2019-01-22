@@ -129,7 +129,7 @@ namespace Potesta.FlexInput
                         NegativeAxisString = NegativeAxisName;
                     }
                 }
-                NegativeAxisModifier = controller.AxisCalibrations.ContainsKey(NegativeAxisName) ? controller.AxisCalibrations[NegativeAxisName] : SameValue;
+                NegativeAxisModifier = NegativeAxisName != null && controller.AxisCalibrations.ContainsKey(NegativeAxisName) ? controller.AxisCalibrations[NegativeAxisName] : SameValue;
             }
         }
 
